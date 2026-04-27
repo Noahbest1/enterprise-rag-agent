@@ -335,9 +335,10 @@ CI(`.github/workflows/ci.yml`)在每次 PR 跑 pytest + 离线 gate。
 
 ---
 
-## 8. 部署
+## 8. 部署 & 文档
 
-详见 [docs/DEPLOY.md](./docs/DEPLOY.md),提供 Render / Fly.io / Vercel 一键部署指南。
+- **部署** — 详见 [docs/DEPLOY.md](./docs/DEPLOY.md),提供 Render / Fly.io / Vercel 一键部署指南
+- **架构决策** — 详见 [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md),记录 10 个非显而易见的设计选择(Plan-and-Execute vs ReAct、4 层记忆拆分、三向量后端 ABC、specialist 干跑等),ADR 风格:**决策 + 为什么不选其他 + 大规模时会调整什么**
 
 ### ⚠️ 部署到公网前先锁紧防御
 

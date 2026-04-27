@@ -368,9 +368,10 @@ CI runs pytest + the offline gate on every PR (`.github/workflows/ci.yml`).
 
 ---
 
-## 8. Deployment
+## 8. Deployment & docs
 
-See [docs/DEPLOY.md](./docs/DEPLOY.md) for one-click deploy to Render / Fly.io / Vercel.
+- **Deployment** — see [docs/DEPLOY.md](./docs/DEPLOY.md) for one-click deploy to Render / Fly.io / Vercel.
+- **Architecture decisions** — see [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for the 10 non-obvious design choices (Plan-and-Execute vs ReAct, 4-layer memory split, three-vector-backend ABC, dry-run specialists, etc.) — written in ADR style: the **decision**, **why over alternatives**, **what we'd revisit at scale**.
 
 ### ⚠️ If you deploy this publicly, lock it down first
 
