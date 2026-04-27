@@ -69,6 +69,13 @@ def test_classify_chitchat(query):
     "如何申请退货",
     "What is the return policy for damaged items?",
     "解释一下高内聚低耦合在架构层面如何体现",
+    # False-positive guard: colloquial "刚刚问下" / "刚刚问一下" / "之前问下"
+    # = "let me just ask", NOT meta. Without the (?!一?下) lookahead these
+    # would misclassify and the user's real question would be eaten by the
+    # meta fallback message.
+    "我刚刚问下,退货怎么办",
+    "刚刚问一下 PLUS 多少钱",
+    "之前问下,这个能退吗",
 ])
 def test_classify_kb_default(query):
     v = classify_intent(query, has_conversation=True)
