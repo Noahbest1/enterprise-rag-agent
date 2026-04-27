@@ -184,20 +184,32 @@ Format inspired by [ADR (Architecture Decision Records)](https://adr.github.io/)
 
 ---
 
-## ADR-10: Reversible state machines (cancel ↔ reopen) for tickets
+## ADR-10: Status-aware order actions + reversible state machines
 
-**Decision**: Both `complaint` and `return_request` support a full state cycle with API-layer enforcement. A "cancelled" complaint can be reopened, restoring the original severity-appropriate active state (severity high → escalated; severity medium/low → open) and resetting the SLA clock. Wrong-state transitions return `409 Conflict`.
+**Decision**: Three different DB-mutating action paths, each gated by the **current order/ticket status** so the front-end always shows a meaningful next step instead of a dead-end error.
+
+| Status | User action | Backend |
+|---|---|---|
+| `placed` / `paid` (not yet shipped) | "取消订单" | `POST /agent/actions/cancel-order` — flips status=cancelled, full refund, audit |
+| `shipped` (in transit) | "联系客服拦截" | `POST /agent/actions/submit-complaint` topic=delivery → human-handled |
+| `delivered` + within 7-day window | "此单退货" | `POST /agent/actions/confirm-return` — self-service, persists ReturnRequest |
+| `delivered` past window | "申诉退货" | Falls back to complaint flow (manual review path) |
+| `complaint` / `return_request` after submission | cancel ↔ reopen | API-layer 409 on wrong-state transitions |
+
+The 7-day no-reason window starts at **estimated sign date** (`placed_at + 3 days shipping`), not at order placement — the original implementation rejected delivered orders too aggressively because it counted from `placed_at` (an early-session bug we caught in live testing).
 
 **Alternatives considered**:
-- One-way (close = terminal). Simpler model.
-- Soft-delete (`is_active` flag) without state machine.
+- Always show one button ("此单退货") and let the eligibility check error out — fails open with poor UX.
+- One-way state (close = terminal) — simpler, but a misclassified complaint or accidentally-cancelled return forces the user to file a fresh ticket and loses the conversation thread.
+- Soft-delete (`is_active` flag) instead of true state machine — collapses semantics that should differ (e.g., a cancelled-then-reopened complaint should restore severity-appropriate SLA, which `is_active=true` can't express).
 
-**Why reversible state machine**:
-- **Real customer service requires it**. A user mistakenly cancelled a return request → can reopen. A misclassified complaint → admin reopens with proper severity. Without reversibility, the user has to file a new ticket and lose the conversation thread.
-- **API enforcement matters**. UI can disable buttons, but a determined user with `curl` should still get `409`, not 500 or silent corruption.
-- **Severity restoration**. When reopening, we re-derive the severity from the original classification — not just a flat "active" flag. That's because admin "only-escalated" filter depends on it, and a high-severity ticket reopened as merely "open" would silently disappear from the queue.
+**Why this layering**:
+- **Each status maps to a distinct user intent**. Cancel-before-shipment is automatic (no merchant cost); intercept-in-transit needs human coordination; self-service-return assumes the package is in the customer's hands. Conflating them in one button confuses the user about who pays the shipping back.
+- **API enforcement matters**. UI can disable buttons, but a determined user with `curl` should still get `409 Conflict` on wrong-state transitions, not 500 or silent corruption.
+- **Severity restoration on reopen**. When reopening a complaint, we re-derive the original severity (not just a flat "active" flag) because the admin "only-escalated" filter depends on it — a high-severity ticket reopened as merely "open" would silently disappear from the queue.
+- **`escalate_action` field on eligibility responses** drives the front-end button choice declaratively (`cancel_order` / `escalate_intercept` / `escalate_appeal` / `self_service_return` / `null`), so future status additions only need a single dispatch table edit.
 
-**What we'd revisit**: Once the state diagram has more than 5 states, a proper state machine library (`transitions`, `automaton`) earns its keep. At 4 states each, hand-coded `if state == ...` is fine.
+**What we'd revisit**: Once the state diagram has more than 5 states, a proper state machine library (`transitions`, `automaton`) earns its keep. At today's 4-state-per-entity scale, hand-coded `if status == ...` is fine. The shipping-estimate constant (3 days) should be replaced with a real `delivered_at` column once we have logistics-webhook signals.
 
 ---
 

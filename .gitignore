@@ -31,6 +31,15 @@ data/eval/results/
 .cache/
 .huggingface/
 
+# Runtime SQLite databases — get touched on every API run / test run.
+# Initial commit accidentally tracked them; ignore now + git rm --cached.
+data/rag.db
+data/langgraph.sqlite
+data/langgraph.sqlite-shm
+data/langgraph.sqlite-wal
+*.db-shm
+*.db-wal
+
 # Course materials & coursework (copyright / plagiarism-detection risk on public push)
 data/kb/5033/
 data/kb/cs4303/

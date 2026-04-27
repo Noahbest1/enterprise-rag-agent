@@ -2,7 +2,7 @@
 
 **🌐 Languages**: [English](./README.md) · 中文(本页)
 
-[![Tests](https://img.shields.io/badge/tests-521_passed-brightgreen)](#)
+[![Tests](https://img.shields.io/badge/tests-544_passed-brightgreen)](#)
 [![Hit@5](https://img.shields.io/badge/Hit%405-1.000-brightgreen)](#)
 [![MRR@10](https://img.shields.io/badge/MRR%4010-0.878-brightgreen)](#)
 [![Eval](https://img.shields.io/badge/eval-84_rows_/_4_categories-blue)](#)
@@ -41,7 +41,7 @@
 | **🖼 多模态** | 图文互搜 + 版面感知的 PPT / 图表摄入 | **CLIP** ViT-B-32(512 维图文同空间)+ **Qwen-VL** 版面切分(标题 / 正文 / 表格 / 图形 / 代码) |
 | **🔌 MCP** | 把项目能力以标准协议形式暴露给外部工具 | **Model Context Protocol**(Anthropic 2024 stdio)· 7 个 Tools + 2 个 Resources + 3 个 Prompts · 可被 Claude Desktop / Cursor 直接接入 |
 
-**质量靠测,不靠吹**。84 行人工标注 eval 集,CI 自动阻断 Hit@5 / MRR 跌幅超 0.02 的 PR。**521 单元测试**覆盖 DB / API / SSE 总线 / Agent 流程 / RAG 检索 / 多轮一致性。
+**质量靠测,不靠吹**。84 行人工标注 eval 集,CI 自动阻断 Hit@5 / MRR 跌幅超 0.02 的 PR。**544 单元测试**覆盖 DB / API / SSE 总线 / Agent 流程 / RAG 检索 / 多轮一致性。
 
 ### 多轮对话做对了(3 层修复,都是真实测试中发现的 bug)
 
@@ -145,7 +145,7 @@ flowchart TB
 | 检索 MRR@10 | **0.878** rewrite=on | 同上 |
 | Multi-hop bucket MRR | **0.971** | Contextual Retrieval 文档级前缀 |
 | 答案忠实度(LLM-as-judge) | **0.90+** | Grounded prompt + 弃答策略 |
-| 测试数 | **521 通过**, 4 跳过, 1 排除 | `pytest -m "not integration"` |
+| 测试数 | **544 通过**, 4 跳过, 1 排除 | `pytest -m "not integration"` |
 | 向量后端 | FAISS + Qdrant + **PGVector** | 统一 `VectorStore` ABC 接口 |
 | Specialist 节点 | **9 个**(Plan-and-Execute) | product_qa / policy_qa / order / logistics / aftersale / recommend / invoice / complaint / account |
 | 前端 bundle | 226 KB / 71 KB gzip | Vite + React, 5 路由 |
@@ -420,7 +420,7 @@ MAX_PROMPT_TOKENS_PER_REQUEST=4096  # 单请求 prompt 大小上限
 
 5. **可观测**。每个请求一个 trace_id,每个业务事件一行审计(仅哈希),Prometheus + OpenTelemetry 由 env flag 启停。
 
-6. **可测**。**521 行 pytest** 覆盖 DB / API / SSE 总线 / Agent 流程 / RAG 检索 / 幻觉校验 / 会话 / 用户偏好 / 多轮一致性 / **3 路意图分流** / **改写器 recency bias** / **答题器看 2 轮历史**。
+6. **可测**。**544 行 pytest** 覆盖 DB / API / SSE 总线 / Agent 流程 / RAG 检索 / 幻觉校验 / 会话 / 用户偏好 / 多轮一致性 / **3 路意图分流** / **改写器 recency bias** / **答题器看 2 轮历史** / **状态感知订单动作(取消 / 拦截 / 退货)**。
 
 7. **多轮做对了(3 层修复)**。
    - **改写器**带历史看 + 显式 *recency bias* —— 用户说 "翻译那个" 时,内容来源是**最近一轮 assistant**,不是最早的 user 问题(这是真实的 W02-L01 长程指代 bug,通过 prompt-engineering + 4 个测试修复)。

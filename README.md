@@ -3,7 +3,7 @@
 **🌐 Languages**: English (this page) · [中文](./README.zh.md)
 
 
-[![Tests](https://img.shields.io/badge/tests-521_passed-brightgreen)](#)
+[![Tests](https://img.shields.io/badge/tests-544_passed-brightgreen)](#)
 [![Hit@5](https://img.shields.io/badge/Hit%405-1.000-brightgreen)](#)
 [![MRR@10](https://img.shields.io/badge/MRR%4010-0.878-brightgreen)](#)
 [![Eval](https://img.shields.io/badge/eval-84_rows_/_4_categories-blue)](#)
@@ -50,7 +50,7 @@ acts, and persists state across sessions.
 | **🔌 MCP** | Project capabilities exposed as a standard tool server | **Model Context Protocol** (Anthropic 2024 stdio) · 7 Tools + 2 Resources + 3 Prompts · Claude Desktop / Cursor compatible |
 
 **Quality is measured, not asserted.** 84-row hand-curated eval set, CI
-auto-blocks merges that drop Hit@5 / MRR by more than 0.02. **521 unit
+auto-blocks merges that drop Hit@5 / MRR by more than 0.02. **544 unit
 tests** cover DB / API / SSE bus / agent flow / RAG retrieval / multi-turn
 correctness.
 
@@ -160,7 +160,7 @@ flowchart TB
 | Retrieval MRR@10 | **0.878** rewrite=on | Same pipeline |
 | Multi-hop bucket MRR | **0.971** | Contextual Retrieval prefixes |
 | Answer faithful (LLM-as-judge) | **0.90+** | Grounded prompt + abstain |
-| Test count | **521 passed**, 4 skipped, 1 deselected | `pytest -m "not integration"` |
+| Test count | **544 passed**, 4 skipped, 1 deselected | `pytest -m "not integration"` |
 | Backends | FAISS + Qdrant + **PGVector** | One `VectorStore` ABC |
 | Specialists | **9** (Plan-and-Execute) | product_qa / policy_qa / order / logistics / aftersale / recommend / invoice / complaint / account |
 | Frontend bundle | 226 KB / 71 KB gzip | Vite + React, 5 routes |
@@ -446,7 +446,7 @@ fluent but **zero LLM calls**, so reviewing is free.
 
 5. **Observable**. Every request gets a trace_id, every business event gets an audit row (hashes only), Prometheus metrics + OpenTelemetry tracing on by env flag.
 
-6. **Testable**. 521-row pytest covering DB / API / SSE bus / agent flow / RAG retrieval / hallucination check / sessions / preferences / multi-turn closure consistency / **3-way intent routing** / **rewriter recency bias** / **answerer last-2-turns context guard**.
+6. **Testable**. 544-row pytest covering DB / API / SSE bus / agent flow / RAG retrieval / hallucination check / sessions / preferences / multi-turn closure consistency / **3-way intent routing** / **rewriter recency bias** / **answerer last-2-turns context guard** / **status-aware order actions (cancel / escalate / return)**.
 
 7. **Multi-turn done right (3 layered fixes)**.
    - **Rewriter** sees history with explicit *recency bias* — when the user says "translate that", the source is the **most recent** assistant turn, not the earliest user question (a real W02-L01 long-range coreference bug, fixed via prompt-engineering + 4 tests).
