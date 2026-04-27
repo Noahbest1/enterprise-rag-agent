@@ -281,6 +281,11 @@ export default function AdminDashboard() {
     <div style={S.page}>
       <header style={S.header}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <a href="/" style={{
+            color: "#6b7280", textDecoration: "none", fontSize: 13,
+            padding: "4px 10px", borderRadius: 6, border: "1px solid #e5e7eb",
+            background: "#fff",
+          }}>← 首页</a>
           <span style={{ fontSize: 18, fontWeight: 600 }}>🎧 客服后台</span>
           <span style={S.counterChip}>
             {counts.all} 条 · 升级 {counts.escalated} · 开放 {counts.open}

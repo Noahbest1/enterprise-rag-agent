@@ -693,6 +693,11 @@ export default function AgentChat() {
     <div style={S.root}>
       <header style={S.header}>
         <div style={S.brand}>
+          <a href="/" style={{
+            color: "#6b7280", textDecoration: "none", fontSize: 13,
+            padding: "4px 10px", borderRadius: 6, border: "1px solid #e5e7eb",
+            background: "#fff", marginRight: 8,
+          }}>← 首页</a>
           <span style={{ fontWeight: 700 }}>🤖 Enterprise Agent</span>
           <span style={S.badge}>{tenant.toUpperCase()}</span>
           <span style={S.subtle}>thread: {threadId.slice(0, 12)}…</span>

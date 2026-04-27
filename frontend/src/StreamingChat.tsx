@@ -45,6 +45,33 @@ type Message = {
 
 const DEFAULT_API_BASE = (import.meta as any).env?.VITE_API_BASE || "http://127.0.0.1:8008";
 
+// Persist conversation across reloads — same pattern as AgentChat.
+// Storage key includes the kb_id so switching KB doesn't mix conversations.
+const STORAGE_PREFIX = "rag_stream_msgs:";
+
+function loadMessages(kbId: string): Message[] {
+  if (!kbId) return [];
+  try {
+    const raw = localStorage.getItem(STORAGE_PREFIX + kbId);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    // Defensive: clear any stuck `streaming: true` from a previous tab crash.
+    return parsed.map((m: Message) => ({ ...m, streaming: false }));
+  } catch {
+    return [];
+  }
+}
+
+function saveMessages(kbId: string, msgs: Message[]) {
+  if (!kbId) return;
+  try {
+    localStorage.setItem(STORAGE_PREFIX + kbId, JSON.stringify(msgs));
+  } catch {
+    /* quota exceeded or storage disabled — drop silently */
+  }
+}
+
 export default function StreamingChat() {
   const [kbs, setKbs] = useState<KB[]>([]);
   const [kbId, setKbId] = useState<string>("");
@@ -53,6 +80,26 @@ export default function StreamingChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [busy, setBusy] = useState(false);
   const endRef = useRef<HTMLDivElement | null>(null);
+
+  // Restore messages from localStorage when kb_id resolves (initial load
+  // or user switches KB). Without this every page reload wipes the chat.
+  useEffect(() => {
+    if (!kbId) return;
+    setMessages(loadMessages(kbId));
+  }, [kbId]);
+
+  // Persist on every message change. Skips empty arrays so freshly cleared
+  // chats don't retain stale state.
+  useEffect(() => {
+    if (!kbId) return;
+    saveMessages(kbId, messages);
+  }, [kbId, messages]);
+
+  function newConversation() {
+    if (messages.length > 0 && !confirm("清空当前对话?(已发送的消息会丢失)")) return;
+    setMessages([]);
+    if (kbId) localStorage.removeItem(STORAGE_PREFIX + kbId);
+  }
 
   // Load KB list on mount.
   useEffect(() => {
@@ -166,7 +213,14 @@ export default function StreamingChat() {
   return (
     <div style={styles.root}>
       <header style={styles.header}>
-        <div style={styles.brand}>💬 RAG Streaming Chat</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <a href="/" style={{
+            color: "#6b7280", textDecoration: "none", fontSize: 13,
+            padding: "4px 10px", borderRadius: 6, border: "1px solid #e5e7eb",
+            background: "#fff",
+          }}>← 首页</a>
+          <div style={styles.brand}>💬 RAG Streaming Chat</div>
+        </div>
         <div style={styles.controls}>
           <label style={styles.label}>KB:</label>
           <select value={kbId} onChange={(e) => setKbId(e.target.value)} style={styles.select}>
@@ -177,6 +231,18 @@ export default function StreamingChat() {
               </option>
             ))}
           </select>
+          <button
+            type="button"
+            onClick={newConversation}
+            disabled={busy}
+            style={{
+              padding: "6px 12px", borderRadius: 6, border: "1px solid #ddd6fe",
+              background: "#f5f3ff", color: "#6d28d9", fontSize: 13,
+              cursor: busy ? "not-allowed" : "pointer",
+            }}
+          >
+            ＋ 新对话
+          </button>
           <label style={styles.label}>API key (optional):</label>
           <input
             type="password"
