@@ -16,24 +16,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /build
 COPY requirements-api.txt requirements-retrieval.txt ./
 
-# Install extra production deps (structured config + logging, qdrant, redis, pg).
+# All runtime deps now live in requirements-api.txt (single source of truth).
+# Previously this layer also pip-installed pydantic-settings / structlog /
+# qdrant-client / etc. inline — moved them into requirements so CI + Docker
+# stay in sync.
 RUN pip install --upgrade pip && \
-    pip install -r requirements-api.txt && \
-    pip install \
-        "pydantic-settings>=2.5" \
-        "structlog>=24.0" \
-        "qdrant-client>=1.12" \
-        "redis>=5.0" \
-        "psycopg[binary]>=3.2" \
-        "sqlalchemy>=2.0" \
-        "httpx>=0.27" \
-        "tenacity>=9.0" \
-        "slowapi>=0.1.9" \
-        "langgraph>=1.0" \
-        "langchain-core>=1.0" \
-        "langgraph-checkpoint-sqlite>=2.0" \
-        "aiosqlite>=0.19" \
-        "alembic>=1.13"
+    pip install -r requirements-api.txt
 
 
 FROM python:3.12-slim AS runtime
