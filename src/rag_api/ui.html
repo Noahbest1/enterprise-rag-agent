@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RAG · 知识库问答</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --panel: #12151c;
+    --panel-2: #1a1f2a;
+    --border: #252b38;
+    --text: #e6e8ef;
+    --muted: #8a93a6;
+    --accent: #4f8cff;
+    --accent-2: #6ba5ff;
+    --good: #4ade80;
+    --warn: #fbbf24;
+    --bad: #f87171;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft Yahei", system-ui, sans-serif; height: 100%; }
+  body { display: grid; grid-template-columns: 280px 1fr; height: 100vh; }
+  aside { background: var(--panel); border-right: 1px solid var(--border); padding: 16px; overflow-y: auto; }
+  main { display: flex; flex-direction: column; overflow: hidden; }
+  h1 { font-size: 16px; margin: 0 0 12px; letter-spacing: 0.5px; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 16px 0 8px; font-weight: 600; }
+  .kb-item { padding: 10px 12px; border-radius: 6px; cursor: pointer; margin-bottom: 4px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; border: 1px solid transparent; }
+  .kb-item:hover { background: var(--panel-2); }
+  .kb-item.active { background: var(--panel-2); border-color: var(--accent); }
+  .kb-item .count { color: var(--muted); font-size: 11px; }
+  .toolbar { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; align-items: center; }
+  .toolbar input { flex: 1; background: var(--panel); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+  .toolbar input:focus { outline: none; border-color: var(--accent); }
+  .toolbar button { background: var(--accent); color: white; border: none; border-radius: 6px; padding: 8px 18px; font-size: 14px; cursor: pointer; font-weight: 500; }
+  .toolbar button:hover:not(:disabled) { background: var(--accent-2); }
+  .toolbar button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .opts { display: flex; gap: 12px; padding: 8px 16px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+  .opts label { cursor: pointer; }
+  .opts input { margin-right: 4px; }
+  .conversation { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+  .turn { display: flex; flex-direction: column; gap: 8px; }
+  .q { color: var(--muted); font-size: 13px; }
+  .q::before { content: "Q · "; color: var(--accent); font-weight: 600; }
+  .a-wrap { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .a { font-size: 15px; line-height: 1.7; white-space: pre-wrap; word-wrap: break-word; }
+  .a mark { background: rgba(79, 140, 255, 0.2); color: var(--accent-2); padding: 0 4px; border-radius: 3px; font-weight: 600; text-decoration: none; cursor: pointer; }
+  .meta { display: flex; gap: 16px; font-size: 11px; color: var(--muted); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .meta .tag { background: var(--panel-2); padding: 2px 8px; border-radius: 10px; }
+  .meta .abstained { color: var(--warn); }
+  .citations { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .cite { background: var(--panel-2); border-radius: 6px; padding: 8px 12px; font-size: 12px; }
+  .cite .ch { color: var(--accent); font-weight: 600; margin-right: 6px; }
+  .cite .title { color: var(--text); font-weight: 500; }
+  .cite .path { color: var(--muted); margin-left: 6px; }
+  .cite .snippet { color: var(--muted); margin-top: 4px; font-size: 11px; line-height: 1.5; }
+  .hits { margin-top: 10px; }
+  .hits summary { color: var(--muted); font-size: 11px; cursor: pointer; padding: 4px 0; }
+  .hits ol { margin: 6px 0 0 0; padding-left: 20px; font-size: 11px; color: var(--muted); }
+  .hits li { margin: 2px 0; }
+  .status { padding: 20px; text-align: center; color: var(--muted); font-size: 13px; }
+  .error { color: var(--bad); background: rgba(248, 113, 113, 0.08); border: 1px solid var(--bad); padding: 12px; border-radius: 6px; margin: 8px 0; }
+  .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--muted); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+  <aside>
+    <h1>🔎 RAG</h1>
+    <h2>知识库</h2>
+    <div id="kb-list">
+      <div class="status">加载中...</div>
+    </div>
+    <h2>状态</h2>
+    <div id="health" style="font-size: 11px; color: var(--muted);">-</div>
+  </aside>
+  <main>
+    <div class="toolbar">
+      <input id="query" type="text" placeholder="问任何关于当前知识库的问题(支持中英文)..." />
+      <button id="ask">发送</button>
+    </div>
+    <div class="opts">
+      <label><input type="checkbox" id="opt-rewrite" checked />LLM query rewrite</label>
+      <label><input type="checkbox" id="opt-rerank" checked />Cross-encoder rerank</label>
+      <label><input type="checkbox" id="opt-debug" />显示 retrieval debug</label>
+    </div>
+    <div class="conversation" id="conversation">
+      <div class="status">选一个知识库,然后问问题。</div>
+    </div>
+  </main>
+
+<script>
+const API = window.location.origin;
+let selectedKB = null;
+let busy = false;
+
+const el = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+async function api(path, init) {
+  const r = await fetch(`${API}${path}`, init);
+  if (!r.ok) {
+    const txt = await r.text();
+    throw new Error(`${r.status} ${r.statusText} · ${txt.slice(0, 200)}`);
+  }
+  return r.json();
+}
+
+async function loadHealth() {
+  try {
+    const h = await api("/health");
+    el("health").textContent = `✓ ${h.status} · kb_root: ${h.kb_root}`;
+  } catch (e) {
+    el("health").innerHTML = `<span class="error">service down</span>`;
+  }
+}
+
+async function loadKBs() {
+  try {
+    const { items } = await api("/kbs");
+    const list = el("kb-list");
+    if (!items.length) {
+      list.innerHTML = `<div class="status">还没有知识库。<br/>用 <code>build_kb.py</code> 建一个。</div>`;
+      return;
+    }
+    list.innerHTML = items.map(kb =>
+      `<div class="kb-item" data-id="${esc(kb.kb_id)}">
+        <span>${esc(kb.kb_id)}</span>
+        <span class="count">${kb.chunk_count}</span>
+      </div>`
+    ).join("");
+    list.querySelectorAll(".kb-item").forEach(node => {
+      node.addEventListener("click", () => selectKB(node.dataset.id));
+    });
+    if (items.length > 0) selectKB(items[0].kb_id);
+  } catch (e) {
+    el("kb-list").innerHTML = `<div class="error">${esc(e.message)}</div>`;
+  }
+}
+
+function selectKB(id) {
+  selectedKB = id;
+  document.querySelectorAll(".kb-item").forEach(n => n.classList.toggle("active", n.dataset.id === id));
+  const conv = el("conversation");
+  if (!conv.dataset.hasAsked) {
+    conv.innerHTML = `<div class="status">已选 <b>${esc(id)}</b>。直接在上方输入框提问。</div>`;
+  }
+}
+
+function linkifyCites(text, n) {
+  return esc(text).replace(/\[(\d+)\]/g, (_, d) =>
+    +d <= n ? `<mark data-n="${d}">[${d}]</mark>` : `[${d}]`);
+}
+
+async function ask() {
+  if (busy) return;
+  const q = el("query").value.trim();
+  if (!q) return;
+  if (!selectedKB) { alert("先选一个知识库"); return; }
+  busy = true;
+  el("ask").disabled = true;
+  el("ask").innerHTML = '<span class="spinner"></span>';
+
+  const conv = el("conversation");
+  conv.dataset.hasAsked = "1";
+  const turn = document.createElement("div");
+  turn.className = "turn";
+  turn.innerHTML = `<div class="q">${esc(q)}</div><div class="a-wrap"><div class="a"><span class="spinner"></span> 正在检索与生成...</div></div>`;
+  conv.appendChild(turn);
+  conv.scrollTop = conv.scrollHeight;
+
+  try {
+    const r = await api("/answer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: q,
+        kb_id: selectedKB,
+        use_rewrite: el("opt-rewrite").checked,
+        use_rerank: el("opt-rerank").checked,
+      }),
+    });
+
+    const nCites = r.citations.length;
+    let html = `<div class="a">${linkifyCites(r.answer, r.hits.length)}</div>`;
+    html += `<div class="meta">
+      ${r.abstained ? '<span class="abstained">⚠ abstain: ' + esc(r.reason) + '</span>' : '<span class="tag">✓ answered</span>'}
+      <span class="tag">${r.latency_ms} ms</span>
+      <span class="tag">rewrite: ${esc(r.rewritten_query).slice(0, 80)}${r.rewritten_query.length > 80 ? '…' : ''}</span>
+    </div>`;
+    if (r.citations.length) {
+      html += `<div class="citations">` + r.citations.map(c =>
+        `<div class="cite">
+          <span class="ch">[${c.n}]</span>
+          <span class="title">${esc(c.title)}</span>
+          <span class="path">${esc((c.section_path || []).join(" / "))}</span>
+          <div class="snippet">${esc(c.snippet)}</div>
+        </div>`).join("") + `</div>`;
+    }
+    if (el("opt-debug").checked && r.hits.length) {
+      html += `<details class="hits" open><summary>retrieval debug (${r.hits.length} hits)</summary><ol>` +
+        r.hits.map(h =>
+          `<li>[${h.score.toFixed(3)}] (${esc(h.retrieval_source)}) ${esc(h.title)} — ${esc((h.section_path || []).join(" / "))}</li>`
+        ).join("") + `</ol></details>`;
+    }
+    turn.querySelector(".a-wrap").innerHTML = html;
+  } catch (e) {
+    turn.querySelector(".a-wrap").innerHTML = `<div class="error">${esc(e.message)}</div>`;
+  } finally {
+    busy = false;
+    el("ask").disabled = false;
+    el("ask").textContent = "发送";
+    el("query").value = "";
+    el("query").focus();
+    conv.scrollTop = conv.scrollHeight;
+  }
+}
+
+el("ask").addEventListener("click", ask);
+el("query").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(); }
+});
+
+loadHealth();
+loadKBs();
+</script>
+</body>
+</html>

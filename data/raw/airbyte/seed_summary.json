@@ -1,0 +1,300 @@
+{
+  "tenant": "airbyte",
+  "repo_root": "/private/tmp/airbyte-source-2",
+  "copied_count": 41,
+  "by_category": {
+    "docs": 18,
+    "faq": 6,
+    "release_notes": 14,
+    "images": 3
+  },
+  "files": [
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/overview/README.md",
+      "upstream_path": "README.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/README.md",
+      "notes": "Product overview and getting started entrypoint."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/getting-started/oss-quickstart.md",
+      "upstream_path": "docs/platform/using-airbyte/getting-started/oss-quickstart.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/oss-quickstart.md",
+      "notes": "Self-managed quickstart."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/getting-started/add-a-source.md",
+      "upstream_path": "docs/platform/using-airbyte/getting-started/add-a-source.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/add-a-source.md",
+      "notes": "Source configuration guide."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/getting-started/add-a-destination.md",
+      "upstream_path": "docs/platform/using-airbyte/getting-started/add-a-destination.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/add-a-destination.md",
+      "notes": "Destination configuration guide."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/getting-started/set-up-a-connection.md",
+      "upstream_path": "docs/platform/using-airbyte/getting-started/set-up-a-connection.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/set-up-a-connection.md",
+      "notes": "Connection setup walkthrough."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/getting-started/connector-setup-assistant.md",
+      "upstream_path": "docs/platform/using-airbyte/getting-started/_connector-setup-assistant.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/_connector-setup-assistant.md",
+      "notes": "AI-assisted connector setup workflow."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/getting-started/academy.md",
+      "upstream_path": "docs/platform/using-airbyte/getting-started/academy.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/academy.md",
+      "notes": "Training and learning entrypoint for onboarding use cases."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/operator-guides/upgrading-airbyte.md",
+      "upstream_path": "docs/platform/operator-guides/upgrading-airbyte.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/operator-guides/upgrading-airbyte.md",
+      "notes": "Upgrade procedure and operational guidance."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/operator-guides/browsing-output-logs.md",
+      "upstream_path": "docs/platform/operator-guides/browsing-output-logs.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/operator-guides/browsing-output-logs.md",
+      "notes": "Operational log inspection guidance."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/operator-guides/clear.md",
+      "upstream_path": "docs/platform/operator-guides/clear.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/operator-guides/clear.md",
+      "notes": "Clear and refresh semantics."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/operator-guides/collecting-metrics.md",
+      "upstream_path": "docs/platform/operator-guides/collecting-metrics.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/operator-guides/collecting-metrics.md",
+      "notes": "Operational metrics collection guidance."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/operator-guides/configuring-airbyte.md",
+      "upstream_path": "docs/platform/operator-guides/configuring-airbyte.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/operator-guides/configuring-airbyte.md",
+      "notes": "Core platform configuration reference."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/operator-guides/configuring-connector-resources.md",
+      "upstream_path": "docs/platform/operator-guides/configuring-connector-resources.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/operator-guides/configuring-connector-resources.md",
+      "notes": "Connector resource tuning and sizing guidance."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/operator-guides/open-telemetry.md",
+      "upstream_path": "docs/platform/operator-guides/open-telemetry.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/operator-guides/open-telemetry.md",
+      "notes": "OpenTelemetry integration reference."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/operator-guides/refreshes.md",
+      "upstream_path": "docs/platform/operator-guides/refreshes.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/operator-guides/refreshes.md",
+      "notes": "Refresh modes and operational behavior."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/operator-guides/scaling-airbyte.md",
+      "upstream_path": "docs/platform/operator-guides/scaling-airbyte.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/operator-guides/scaling-airbyte.md",
+      "notes": "Scaling and capacity planning guidance."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/operator-guides/telemetry.md",
+      "upstream_path": "docs/platform/operator-guides/telemetry.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/operator-guides/telemetry.md",
+      "notes": "Telemetry collection behavior and controls."
+    },
+    {
+      "category": "docs",
+      "target_path": "data/raw/airbyte/docs/operator-guides/using-custom-connectors.md",
+      "upstream_path": "docs/platform/operator-guides/using-custom-connectors.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/operator-guides/using-custom-connectors.md",
+      "notes": "Custom connector operations and deployment guidance."
+    },
+    {
+      "category": "faq",
+      "target_path": "data/raw/airbyte/faq/troubleshooting/postgres-source.md",
+      "upstream_path": "docs/integrations/sources/postgres/postgres-troubleshooting.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/integrations/sources/postgres/postgres-troubleshooting.md",
+      "notes": "Source troubleshooting guide."
+    },
+    {
+      "category": "faq",
+      "target_path": "data/raw/airbyte/faq/troubleshooting/mysql-source.md",
+      "upstream_path": "docs/integrations/sources/mysql/mysql-troubleshooting.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/integrations/sources/mysql/mysql-troubleshooting.md",
+      "notes": "Source troubleshooting guide."
+    },
+    {
+      "category": "faq",
+      "target_path": "data/raw/airbyte/faq/troubleshooting/postgres-destination.md",
+      "upstream_path": "docs/integrations/destinations/postgres/postgres-troubleshooting.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/integrations/destinations/postgres/postgres-troubleshooting.md",
+      "notes": "Destination troubleshooting guide."
+    },
+    {
+      "category": "faq",
+      "target_path": "data/raw/airbyte/faq/troubleshooting/s3-destination.md",
+      "upstream_path": "docs/integrations/destinations/s3/s3-troubleshooting.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/integrations/destinations/s3/s3-troubleshooting.md",
+      "notes": "Destination troubleshooting guide for S3."
+    },
+    {
+      "category": "faq",
+      "target_path": "data/raw/airbyte/faq/troubleshooting/mssql-source.md",
+      "upstream_path": "docs/integrations/sources/mssql/mssql-troubleshooting.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/integrations/sources/mssql/mssql-troubleshooting.md",
+      "notes": "Source troubleshooting guide for MSSQL."
+    },
+    {
+      "category": "faq",
+      "target_path": "data/raw/airbyte/faq/troubleshooting/mongodb-v2-source.md",
+      "upstream_path": "docs/integrations/sources/mongodb-v2/mongodb-v2-troubleshooting.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/integrations/sources/mongodb-v2/mongodb-v2-troubleshooting.md",
+      "notes": "Source troubleshooting guide for MongoDB V2."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/v-2.1.md",
+      "upstream_path": "docs/release_notes/v-2.1.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/v-2.1.md",
+      "notes": "Recent self-managed release notes."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/v-2.0.md",
+      "upstream_path": "docs/release_notes/v-2.0.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/v-2.0.md",
+      "notes": "Major architecture release."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/v-1.8.md",
+      "upstream_path": "docs/release_notes/v-1.8.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/v-1.8.md",
+      "notes": "Recent stable release notes."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/v-1.7.md",
+      "upstream_path": "docs/release_notes/v-1.7.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/v-1.7.md",
+      "notes": "Historical versioned release notes."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/v-1.6.md",
+      "upstream_path": "docs/release_notes/v-1.6.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/v-1.6.md",
+      "notes": "Historical versioned release notes."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/v-1.5.md",
+      "upstream_path": "docs/release_notes/v-1.5.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/v-1.5.md",
+      "notes": "Historical versioned release notes."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/v-1.4.md",
+      "upstream_path": "docs/release_notes/v-1.4.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/v-1.4.md",
+      "notes": "Historical versioned release notes."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/v-1.3.md",
+      "upstream_path": "docs/release_notes/v-1.3.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/v-1.3.md",
+      "notes": "Historical versioned release notes."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/v-1.2.md",
+      "upstream_path": "docs/release_notes/v-1.2.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/v-1.2.md",
+      "notes": "Historical versioned release notes."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/v-1.1.md",
+      "upstream_path": "docs/release_notes/v-1.1.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/v-1.1.md",
+      "notes": "Historical versioned release notes."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/v-1.0.md",
+      "upstream_path": "docs/release_notes/v-1.0.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/v-1.0.md",
+      "notes": "Historical versioned release notes."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/breaking-changes.md",
+      "upstream_path": "docs/release_notes/breaking-changes.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/breaking-changes.md",
+      "notes": "Cross-version breaking-change index."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/README.md",
+      "upstream_path": "docs/release_notes/readme.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/readme.md",
+      "notes": "Release note navigation and overview."
+    },
+    {
+      "category": "release_notes",
+      "target_path": "data/raw/airbyte/release_notes/upgrading-to-destinations-v2.md",
+      "upstream_path": "docs/release_notes/upgrading_to_destinations_v2.md",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/release_notes/upgrading_to_destinations_v2.md",
+      "notes": "Migration guide for destinations V2."
+    },
+    {
+      "category": "images",
+      "target_path": "data/raw/airbyte/images/getting-started-status-page.png",
+      "upstream_path": "docs/platform/using-airbyte/getting-started/assets/getting-started-status-page.png",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/assets/getting-started-status-page.png",
+      "notes": "UI screenshot for multimodal parsing later."
+    },
+    {
+      "category": "images",
+      "target_path": "data/raw/airbyte/images/getting-started-source-list.png",
+      "upstream_path": "docs/platform/using-airbyte/getting-started/assets/getting-started-source-list.png",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/assets/getting-started-source-list.png",
+      "notes": "Source selection screenshot for multimodal parsing later."
+    },
+    {
+      "category": "images",
+      "target_path": "data/raw/airbyte/images/connector-setup-agent.png",
+      "upstream_path": "docs/platform/using-airbyte/getting-started/assets/connector-setup-agent.png",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/assets/connector-setup-agent.png",
+      "notes": "Agent-assisted connector setup screenshot."
+    }
+  ]
+}

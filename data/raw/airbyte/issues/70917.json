@@ -1,0 +1,149 @@
+{
+  "tenant": "airbyte",
+  "source_type": "issue",
+  "issue_number": 70917,
+  "search_topic": "telemetry",
+  "manifest_notes": "Operational metrics issue where sync job metrics are missing.",
+  "source_url": "https://github.com/airbytehq/airbyte/issues/70917",
+  "issue": {
+    "url": "https://api.github.com/repos/airbytehq/airbyte/issues/70917",
+    "repository_url": "https://api.github.com/repos/airbytehq/airbyte",
+    "labels_url": "https://api.github.com/repos/airbytehq/airbyte/issues/70917/labels{/name}",
+    "comments_url": "https://api.github.com/repos/airbytehq/airbyte/issues/70917/comments",
+    "events_url": "https://api.github.com/repos/airbytehq/airbyte/issues/70917/events",
+    "html_url": "https://github.com/airbytehq/airbyte/issues/70917",
+    "id": 3729935707,
+    "node_id": "I_kwDOEN7yYc7eUk1b",
+    "number": 70917,
+    "title": "Sync jobs metrics not being outputed",
+    "user": {
+      "login": "DFurt",
+      "id": 124409105,
+      "node_id": "U_kgDOB2pVEQ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/124409105?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/DFurt",
+      "html_url": "https://github.com/DFurt",
+      "followers_url": "https://api.github.com/users/DFurt/followers",
+      "following_url": "https://api.github.com/users/DFurt/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DFurt/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/DFurt/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DFurt/subscriptions",
+      "organizations_url": "https://api.github.com/users/DFurt/orgs",
+      "repos_url": "https://api.github.com/users/DFurt/repos",
+      "events_url": "https://api.github.com/users/DFurt/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/DFurt/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "id": 2235194060,
+        "node_id": "MDU6TGFiZWwyMjM1MTk0MDYw",
+        "url": "https://api.github.com/repos/airbytehq/airbyte/labels/type/bug",
+        "name": "type/bug",
+        "color": "d73a4a",
+        "default": false,
+        "description": "Something isn't working"
+      },
+      {
+        "id": 2967111943,
+        "node_id": "MDU6TGFiZWwyOTY3MTExOTQz",
+        "url": "https://api.github.com/repos/airbytehq/airbyte/labels/area/platform",
+        "name": "area/platform",
+        "color": "290471",
+        "default": false,
+        "description": "issues related to the platform"
+      },
+      {
+        "id": 3404226155,
+        "node_id": "LA_kwDOEN7yYc7K6F5r",
+        "url": "https://api.github.com/repos/airbytehq/airbyte/labels/community",
+        "name": "community",
+        "color": "2D7D67",
+        "default": false,
+        "description": ""
+      },
+      {
+        "id": 3592926840,
+        "node_id": "LA_kwDOEN7yYc7WJ7Z4",
+        "url": "https://api.github.com/repos/airbytehq/airbyte/labels/needs-triage",
+        "name": "needs-triage",
+        "color": "E99695",
+        "default": false,
+        "description": ""
+      },
+      {
+        "id": 4039109165,
+        "node_id": "LA_kwDOEN7yYc7wv-ot",
+        "url": "https://api.github.com/repos/airbytehq/airbyte/labels/team/compose",
+        "name": "team/compose",
+        "color": "4CCE65",
+        "default": false,
+        "description": ""
+      },
+      {
+        "id": 4039112453,
+        "node_id": "LA_kwDOEN7yYc7wv_cF",
+        "url": "https://api.github.com/repos/airbytehq/airbyte/labels/team/platform-move",
+        "name": "team/platform-move",
+        "color": "fef2c0",
+        "default": false,
+        "description": ""
+      },
+      {
+        "id": 4057702865,
+        "node_id": "LA_kwDOEN7yYc7x26HR",
+        "url": "https://api.github.com/repos/airbytehq/airbyte/labels/autoteam",
+        "name": "autoteam",
+        "color": "ededed",
+        "default": false,
+        "description": null
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignees": [],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2025-12-15T11:11:59Z",
+    "updated_at": "2025-12-15T11:47:00Z",
+    "closed_at": null,
+    "assignee": null,
+    "author_association": "NONE",
+    "issue_field_values": [],
+    "type": null,
+    "active_lock_reason": null,
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    },
+    "issue_dependencies_summary": {
+      "blocked_by": 0,
+      "total_blocked_by": 0,
+      "blocking": 0,
+      "total_blocking": 0
+    },
+    "body": "### Helm Chart Version\n\n1.8.5\n\n### What step the error happened?\n\nDuring the Sync\n\n### Relevant information\n\nTrying to get sync metrics to be output to open telemetry endpoint. \n\nTried this solution:\n\nhttps://docs.airbyte.com/platform/operator-guides/open-telemetry\n\nWith this, the `OTEL_COLLECTOR_ENDPOINT` in the configmap is populated with the otel endpoint but the metrics are not shared to the grafana I'm using, probably due to being a paid feature:\n\n```\nglobal:\n    edition: enterprise # This is an enterprise-only feature\n    metrics:\n        enabled: true\n        otlp:\n            enabled: true\n            # The OpenTelemetry Collector endpoint Airbyte sends metrics to. You configure this endpoint outside of Airbyte as part of your OpenTelemetry deployment\n            # This endpoint also needs to end in the metrics ingestion endpoint. For OpenTelemetry Collector users, this is /v1/metrics.\n            # e.g. http://localhost:4318/v1/metrics\n            collectorEndpoint: \"YOUR_ENDPOINT\" \n```\n\nTried other ways, like setting these variables directly to the worker pod and as a global.env_vars but these also didn't being the expected outcome.\n\nIs there a way to make this work? Using OSS version deployed with helm in `v1.32.8-gke.1108000`\n\n### Relevant log output\n\n```shell\n\n```",
+    "closed_by": null,
+    "reactions": {
+      "url": "https://api.github.com/repos/airbytehq/airbyte/issues/70917/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "timeline_url": "https://api.github.com/repos/airbytehq/airbyte/issues/70917/timeline",
+    "performed_via_github_app": null,
+    "state_reason": null,
+    "pinned_comment": null
+  },
+  "comments": []
+}

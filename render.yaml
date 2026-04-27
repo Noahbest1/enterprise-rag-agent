@@ -1,0 +1,61 @@
+# Render.com one-click deploy spec.
+#
+# Usage:
+#   1. Push this repo to GitHub.
+#   2. Connect the repo in render.com → "New Blueprint Instance".
+#   3. Render reads this file and provisions: web service + Postgres.
+#   4. Set DASHSCOPE_API_KEY in the env-vars panel (don't commit it).
+#   5. Render auto-deploys on every push to main.
+#
+# Free tier notes:
+#   - Web service free tier sleeps after 15 min idle (cold start ~30 s).
+#   - Postgres free tier: 90 days, then upgrade or migrate. We're not
+#     storing anything that can't be re-seeded, so 90 days is fine for demo.
+#   - For a non-sleeping demo, $7/month "starter" tier on the web service.
+
+services:
+  - type: web
+    name: enterprise-rag-agent
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: DASHSCOPE_API_KEY
+        sync: false  # set in dashboard, not committed
+      - key: DATABASE_URL
+        fromDatabase:
+          name: enterprise-rag-db
+          property: connectionString
+      - key: COPILOT_API_HOST
+        value: 0.0.0.0
+      - key: COPILOT_API_PORT
+        value: 10000  # render.com free tier uses port 10000
+      - key: COPILOT_CORS_ALLOW_ORIGINS
+        value: "*"  # tighten to your frontend domain in prod
+      - key: VECTOR_BACKEND
+        value: faiss  # in-process, no extra service needed for free tier
+      - key: REQUIRE_API_KEY
+        value: "false"  # demo mode: anonymous access OK
+      - key: RATE_LIMIT_ENABLED
+        value: "true"
+      - key: ENABLE_CONTEXTUAL_RETRIEVAL
+        value: "true"
+      - key: ENABLE_FALLBACK_CHAIN
+        value: "false"
+      - key: ENABLE_HALLUCINATION_CHECK
+        value: "false"  # adds 1 LLM call per answer; flip on for high-stakes demos
+    healthCheckPath: /health
+    autoDeploy: true
+
+databases:
+  - name: enterprise-rag-db
+    plan: free
+    databaseName: rag
+    user: rag
+
+# Frontend static deploy on Render (free):
+#  - Build command:    cd frontend && npm install && npm run build
+#  - Publish directory: frontend/dist
+#  - Add a separate web service of type "static_site" pointing at the
+#    same repo. Or host frontend on Vercel (recommended, faster CDN).

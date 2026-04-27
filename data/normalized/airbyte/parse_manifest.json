@@ -1,0 +1,35 @@
+{
+  "tenant": "airbyte",
+  "raw_root": "/Users/neo/enterprise-multimodal-copilot/data/raw/airbyte",
+  "output_root": "/Users/neo/enterprise-multimodal-copilot/data/normalized/airbyte",
+  "parsed_count": 52,
+  "deferred_count": 3,
+  "by_type": {
+    "doc": 24,
+    "issue": 14,
+    "release": 14
+  },
+  "deferred_by_category": {
+    "images": 3
+  },
+  "deferred": [
+    {
+      "category": "images",
+      "target_path": "data/raw/airbyte/images/connector-setup-agent.png",
+      "reason": "awaiting OCR and visual parsing pipeline",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/assets/connector-setup-agent.png"
+    },
+    {
+      "category": "images",
+      "target_path": "data/raw/airbyte/images/getting-started-source-list.png",
+      "reason": "awaiting OCR and visual parsing pipeline",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/assets/getting-started-source-list.png"
+    },
+    {
+      "category": "images",
+      "target_path": "data/raw/airbyte/images/getting-started-status-page.png",
+      "reason": "awaiting OCR and visual parsing pipeline",
+      "source_url": "https://github.com/airbytehq/airbyte/blob/master/docs/platform/using-airbyte/getting-started/assets/getting-started-status-page.png"
+    }
+  ]
+}

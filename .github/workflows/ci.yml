@@ -1,0 +1,61 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Force in-memory SQLite so CI never needs a real DB file.
+      DATABASE_URL: "sqlite+pysqlite:///:memory:"
+      # Keep retrieval deterministic (same as regression_gate default).
+      LOG_LEVEL: "WARNING"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: |
+            requirements-api.txt
+            requirements-retrieval.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-api.txt
+
+      - name: Run unit tests (skip integration)
+        run: pytest -v -m "not integration"
+
+      - name: Check KB indexes are present
+        id: kb_check
+        run: |
+          if [ -f "data/kb/airbyte_demo/chunks.jsonl" ] \
+             && [ -f "data/kb/airbyte_demo/vector.faiss" ] \
+             && [ -f "data/kb/airbyte_demo/bm25.sqlite" ]; then
+            echo "has_indexes=true" >> "$GITHUB_OUTPUT"
+            echo "KB indexes present -- regression gate will run."
+          else
+            echo "has_indexes=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::KB indexes missing (gitignored). Regression gate skipped. Commit indexes or add a build step to activate it."
+          fi
+
+      - name: Run retrieval regression gate (offline)
+        if: steps.kb_check.outputs.has_indexes == 'true'
+        run: python scripts/regression_gate.py --offline
+
+      - name: Upload latest eval metrics
+        if: always() && steps.kb_check.outputs.has_indexes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-latest
+          path: data/eval/results/latest.json
+          if-no-files-found: ignore

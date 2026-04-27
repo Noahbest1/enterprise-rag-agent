@@ -1,0 +1,7 @@
+{
+  "kb_id": "airbyte_demo",
+  "chunk_count": 488,
+  "bm25_path": "bm25.sqlite",
+  "vector_path": "vector.faiss",
+  "vector_meta_path": "vector_meta.jsonl"
+}

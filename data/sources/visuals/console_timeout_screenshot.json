@@ -1,0 +1,35 @@
+{
+  "source_id": "VISUAL-311",
+  "source_type": "visual",
+  "title": "Console screenshot showing sync timeout",
+  "language": "zh-CN",
+  "access_level": "restricted",
+  "product_area": "customer-support",
+  "body_format": "ocr_blocks",
+  "tags": ["visual", "ocr", "console", "timeout"],
+  "updated_at": "2026-03-29T06:55:00Z",
+  "metadata": {
+    "origin_ticket": "TICKET-2041",
+    "image_path": "assets/mock/console_timeout.png"
+  },
+  "sections": [
+    {
+      "section_id": "banner",
+      "title": "OCR banner",
+      "text": "Sync failed: request timeout. Error code: SYNC-504. Retry suggested after reducing batch size.",
+      "bbox": [0.08, 0.11, 0.92, 0.22],
+      "metadata": {
+        "ocr_confidence": 0.97
+      }
+    },
+    {
+      "section_id": "details",
+      "title": "OCR details",
+      "text": "Current plugin version 3.4.1. Last successful sync 2026-03-28 23:10 UTC. Recommended action: lower batch size and retry.",
+      "bbox": [0.12, 0.30, 0.89, 0.54],
+      "metadata": {
+        "ocr_confidence": 0.95
+      }
+    }
+  ]
+}

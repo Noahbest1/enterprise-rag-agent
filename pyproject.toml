@@ -1,0 +1,14 @@
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+addopts = [
+    "-ra",
+    "-q",
+    "--strict-markers",
+    "--disable-warnings",
+]
+markers = [
+    "integration: end-to-end test that hits the live RAG API",
+    "slow: takes > 10 seconds",
+]
+asyncio_mode = "auto"

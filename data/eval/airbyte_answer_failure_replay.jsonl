@@ -1,0 +1,8 @@
+{"query": "Around what scale do Airbyte deployments usually start needing explicit scaling work?", "focus": "quantity_specificity", "notes": "Answer should surface the concrete threshold phrase rather than only generic scaling guidance."}
+{"query": "What should I do to make SQL Server CDC start tracking a column added with ALTER TABLE?", "focus": "action_specificity", "notes": "Answer should include the recommended corrective action, not only the failure description."}
+{"query": "Which Postgres replication method cannot capture row deletions and may require a full table scan?", "focus": "anchor_specificity", "notes": "Qwen should preserve the top-citation anchor term rather than drifting to a broader replication label."}
+{"query": "How do I deploy a local instance of Airbyte Core?", "focus": "command_specificity", "notes": "Answer should surface the concrete deployment command instead of only the overview sentence."}
+{"query": "What is Airbyte?", "focus": "product_definition", "notes": "Definition-style product queries should return a direct product description rather than only a quickstart sentence or abstain."}
+{"query": "tell me abt airbyte", "focus": "product_definition_aliases", "notes": "Lightly abbreviated product-definition phrasing should still retrieve the overview answer."}
+{"query": "how get local airbyte pwd", "focus": "command_aliases", "notes": "Abbreviated command-style phrasing should still recover the credentials command."}
+{"query": "how to use Airbyte?", "focus": "broad_usage_guidance", "notes": "Broad getting-started questions should route to official guidance and produce an onboarding answer rather than abstaining."}

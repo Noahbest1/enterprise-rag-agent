@@ -1,0 +1,34 @@
+{
+  "source_id": "DOC-API-001",
+  "source_type": "doc",
+  "title": "Tenant Sync API Timeout Guide",
+  "language": "zh-CN",
+  "access_level": "internal",
+  "product_area": "integration",
+  "body_format": "sectioned_text",
+  "tags": ["tenant-sync", "timeout", "api", "support"],
+  "canonical_url": "https://kb.acmeops.example/internal/tenant-sync-timeout-guide",
+  "created_at": "2026-03-01T09:00:00Z",
+  "updated_at": "2026-03-28T15:30:00Z",
+  "metadata": {
+    "owner_team": "platform-support",
+    "service": "tenant-sync"
+  },
+  "sections": [
+    {
+      "section_id": "overview",
+      "title": "概览",
+      "text": "Tenant Sync API 用于把外部系统的租户、用户和权限映射同步到 AcmeOps 平台。企业版最常见的失败模式是大批量同步请求触发下游依赖超时，表象通常是控制台显示 request timeout 或 504 gateway timeout。"
+    },
+    {
+      "section_id": "limits",
+      "title": "限流与批次建议",
+      "text": "企业版默认限流为每租户每分钟 120 次写请求。若单次同步包含超过 200 个对象，建议改为分批发送，每批 50 到 100 个对象，并在批次之间加入指数退避。若客户网络抖动明显，优先从每批 50 个对象开始。"
+    },
+    {
+      "section_id": "triage",
+      "title": "超时排查步骤",
+      "text": "排查顺序建议为：一，确认客户是否刚升级到 2026.03 之前的旧版同步插件；二，查看服务端日志中的 error_code 是否为 SYNC-504 或 CACHE-429；三，确认请求批次大小和重试间隔；四，检查 Redis cache 命中率是否异常下降；五，如果 top tenant 的单次 payload 大于 2MB，指导客户拆分请求并重试。"
+    }
+  ]
+}

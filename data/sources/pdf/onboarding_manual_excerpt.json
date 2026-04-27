@@ -1,0 +1,30 @@
+{
+  "source_id": "PDF-ONBOARD-101",
+  "source_type": "pdf",
+  "title": "Enterprise Onboarding Manual Excerpt",
+  "language": "zh-CN",
+  "access_level": "internal",
+  "product_area": "customer-success",
+  "body_format": "pdf_blocks",
+  "tags": ["pdf", "manual", "onboarding", "sync"],
+  "updated_at": "2026-03-18T10:10:00Z",
+  "metadata": {
+    "document_name": "enterprise-onboarding-manual.pdf"
+  },
+  "sections": [
+    {
+      "section_id": "page2-best-practice",
+      "title": "Page 2 - Sync best practices",
+      "page": 2,
+      "text": "对于首次导入，建议每批 50 到 100 个对象。若客户目录结构复杂，重试间隔至少设置为 3 秒，并在夜间低峰时执行全量同步。不要在首次导入时直接提交 300 个以上对象。",
+      "bbox": [0.10, 0.14, 0.89, 0.32]
+    },
+    {
+      "section_id": "page3-escalation",
+      "title": "Page 3 - Escalation checklist",
+      "page": 3,
+      "text": "如果 strategic account 在生产登录链路中受到影响，支持团队必须在 15 分钟内完成一级排查，并创建 Jira 记录插件版本、批次大小、错误码和截图证据。",
+      "bbox": [0.11, 0.17, 0.90, 0.35]
+    }
+  ]
+}

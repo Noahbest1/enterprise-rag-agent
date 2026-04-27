@@ -1,0 +1,5 @@
+{"query":"Tenant Sync API 超时时应该先检查什么？","gold_source_ids":["DOC-API-001","RUNBOOK-007"],"answerable":true,"task_type":"support_qa"}
+{"query":"遇到 SYNC-504 时推荐的批次大小是多少？","gold_source_ids":["DOC-API-001","PDF-ONBOARD-101","ISSUE-1427"],"answerable":true,"task_type":"support_qa"}
+{"query":"2026.03 版本修复了哪个与同步超时相关的问题？","gold_source_ids":["RELEASE-2026-03","ISSUE-1427"],"answerable":true,"task_type":"release_lookup"}
+{"query":"华东证券这个工单什么时候需要升级给 runtime oncall？","gold_source_ids":["TICKET-2041","RUNBOOK-007","PDF-ONBOARD-101"],"answerable":true,"task_type":"escalation"}
+{"query":"控制台截图里显示的错误码是什么？","gold_source_ids":["VISUAL-311"],"answerable":true,"task_type":"visual_grounding"}

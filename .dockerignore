@@ -1,0 +1,37 @@
+# Version control
+.git
+.gitignore
+
+# Python runtime junk
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.pytest_cache
+.mypy_cache
+.ruff_cache
+
+# Local venv (image builds its own)
+.venv
+venv
+
+# IDE
+.vscode
+.idea
+.DS_Store
+
+# Frontend build + node_modules (api image doesn't need them)
+frontend/node_modules
+frontend/dist
+frontend/.next
+
+# Secrets -- use runtime env vars instead
+.env.local
+.env.dev
+.env.prod
+
+# Docs, archives
+docs
+archive
+*.md
+!README.md

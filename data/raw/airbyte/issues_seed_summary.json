@@ -1,0 +1,144 @@
+{
+  "tenant": "airbyte",
+  "source_family": "issues",
+  "issue_count": 14,
+  "by_topic": {
+    "cdc": 4,
+    "auth": 3,
+    "telemetry": 4,
+    "scaling": 2,
+    "connections": 1
+  },
+  "by_state": {
+    "open": 10,
+    "closed": 4
+  },
+  "files": [
+    {
+      "issue_number": 75277,
+      "title": "Postgres CDC (v3.7.2): option to skip initial snapshot and start from current WAL LSN (self‑hosted)",
+      "state": "open",
+      "comment_count": 4,
+      "search_topic": "cdc",
+      "target_path": "data/raw/airbyte/issues/75277.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/75277"
+    },
+    {
+      "issue_number": 13442,
+      "title": "Postgres Source CDC with partitioned tables",
+      "state": "open",
+      "comment_count": 7,
+      "search_topic": "cdc",
+      "target_path": "data/raw/airbyte/issues/13442.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/13442"
+    },
+    {
+      "issue_number": 27510,
+      "title": "Source Postgres: CDC syncs failing on `interval` type columns",
+      "state": "open",
+      "comment_count": 3,
+      "search_topic": "cdc",
+      "target_path": "data/raw/airbyte/issues/27510.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/27510"
+    },
+    {
+      "issue_number": 72936,
+      "title": "[source-postgres] CTID cursor resets to (0,0) when incremental sync returns 0 records",
+      "state": "open",
+      "comment_count": 3,
+      "search_topic": "cdc",
+      "target_path": "data/raw/airbyte/issues/72936.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/72936"
+    },
+    {
+      "issue_number": 61586,
+      "title": "--insecure-cookies is ignored in airbyte 1.6.2 with abctl version: v0.26.0",
+      "state": "open",
+      "comment_count": 16,
+      "search_topic": "auth",
+      "target_path": "data/raw/airbyte/issues/61586.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/61586"
+    },
+    {
+      "issue_number": 66156,
+      "title": "Disable secure cookies error",
+      "state": "open",
+      "comment_count": 5,
+      "search_topic": "auth",
+      "target_path": "data/raw/airbyte/issues/66156.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/66156"
+    },
+    {
+      "issue_number": 65608,
+      "title": "Email shows as not set",
+      "state": "open",
+      "comment_count": 11,
+      "search_topic": "auth",
+      "target_path": "data/raw/airbyte/issues/65608.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/65608"
+    },
+    {
+      "issue_number": 70917,
+      "title": "Sync jobs metrics not being outputed",
+      "state": "open",
+      "comment_count": 0,
+      "search_topic": "telemetry",
+      "target_path": "data/raw/airbyte/issues/70917.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/70917"
+    },
+    {
+      "issue_number": 57556,
+      "title": "Datadog metrics missing in version 1.5",
+      "state": "closed",
+      "comment_count": 2,
+      "search_topic": "telemetry",
+      "target_path": "data/raw/airbyte/issues/57556.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/57556"
+    },
+    {
+      "issue_number": 36045,
+      "title": "[metric-reporter] OTEL collector fails with Invalid endpoint, must start with http:// or https://: ",
+      "state": "closed",
+      "comment_count": 4,
+      "search_topic": "telemetry",
+      "target_path": "data/raw/airbyte/issues/36045.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/36045"
+    },
+    {
+      "issue_number": 35132,
+      "title": "[helm/metric-reporter] Problem with `METRIC_CLIENT=otel` Invalid endpoint",
+      "state": "closed",
+      "comment_count": 3,
+      "search_topic": "telemetry",
+      "target_path": "data/raw/airbyte/issues/35132.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/35132"
+    },
+    {
+      "issue_number": 44447,
+      "title": "Scaling Airbyte Instances with PGBouncer - Connection Issues",
+      "state": "closed",
+      "comment_count": 6,
+      "search_topic": "scaling",
+      "target_path": "data/raw/airbyte/issues/44447.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/44447"
+    },
+    {
+      "issue_number": 18516,
+      "title": "airbyte-server StatusRuntimeException: DEADLINE_EXCEEDED on Initial Deployment",
+      "state": "open",
+      "comment_count": 12,
+      "search_topic": "scaling",
+      "target_path": "data/raw/airbyte/issues/18516.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/18516"
+    },
+    {
+      "issue_number": 29431,
+      "title": "Postgres source shows tables in logs but not in UI",
+      "state": "open",
+      "comment_count": 4,
+      "search_topic": "connections",
+      "target_path": "data/raw/airbyte/issues/29431.json",
+      "source_url": "https://github.com/airbytehq/airbyte/issues/29431"
+    }
+  ]
+}

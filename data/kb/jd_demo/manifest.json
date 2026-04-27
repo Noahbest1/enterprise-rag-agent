@@ -1,0 +1,7 @@
+{
+  "kb_id": "jd_demo",
+  "chunk_count": 100,
+  "indexed_leaves": 50,
+  "bm25_path": "bm25.sqlite",
+  "vector_backend": "faiss"
+}

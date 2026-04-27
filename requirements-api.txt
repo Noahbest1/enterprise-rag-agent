@@ -1,0 +1,21 @@
+-r requirements-retrieval.txt
+fastapi>=0.115,<1.0
+uvicorn>=0.30,<1.0
+pydantic>=2.8,<3.0
+# FastAPI Form/File parsing needs python-multipart. Local dev venv had it
+# transitively; Docker's clean install does not — without this, every
+# multipart endpoint (/kbs/{id}/upload, /vision/*) crashes at startup.
+python-multipart>=0.0.9,<1.0
+prometheus-client>=0.20,<1.0
+opentelemetry-sdk>=1.25,<2.0
+opentelemetry-exporter-otlp>=1.25,<2.0
+python-docx>=1.1,<2.0
+python-pptx>=1.0,<2.0
+openpyxl>=3.1,<4.0
+reportlab>=4.0,<5.0
+# PDF text extraction (PyMuPDF). Required by rag/ingest/loaders.py::load_pdf;
+# without it any .pdf file silently produces zero chunks.
+pymupdf>=1.24,<2.0
+# Optional backend. Only imported when VECTOR_BACKEND=pgvector.
+# psycopg is already pulled in transitively; pgvector gives us type adapters.
+pgvector>=0.4,<1.0

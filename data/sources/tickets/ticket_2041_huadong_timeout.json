@@ -1,0 +1,28 @@
+{
+  "source_id": "TICKET-2041",
+  "source_type": "ticket",
+  "title": "Huadong Securities sync timeout escalation",
+  "language": "zh-CN",
+  "access_level": "restricted",
+  "product_area": "customer-support",
+  "body_format": "sectioned_text",
+  "tags": ["ticket", "strategic-account", "timeout", "escalation"],
+  "updated_at": "2026-03-29T06:50:00Z",
+  "metadata": {
+    "account_tier": "strategic",
+    "customer_name": "Huadong Securities",
+    "severity": "high"
+  },
+  "sections": [
+    {
+      "section_id": "customer_report",
+      "title": "客户反馈",
+      "text": "客户在 03 月 29 日上午反馈，夜间同步任务持续失败，控制台报错 request timeout，影响 SSO 用户映射。客户当前插件版本为 3.4.1，批次大小约 280，重试间隔 1 秒，并附带了控制台截图。"
+    },
+    {
+      "section_id": "support_notes",
+      "title": "支持记录",
+      "text": "一线支持已确认该客户属于 strategic account。根据 runbook，应先建议客户把批次降到 100 以下、重试间隔提高到 3 秒，并确认是否可升级到插件 3.4.2。由于客户影响生产登录，若 15 分钟内无法恢复，需要升级 runtime oncall 并创建 Jira。"
+    }
+  ]
+}

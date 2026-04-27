@@ -1,0 +1,48 @@
+.DS_Store
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Python venv
+.venv/
+venv/
+
+# Env files (keep .env.example committed, ignore real secrets)
+.env
+.env.local
+.env.dev
+.env.prod
+.env.*.local
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.next/
+frontend/build/
+
+# Data and model caches
+data/kb/*/bm25.sqlite
+data/kb/*/vector.faiss
+data/kb/*/vector_meta.jsonl
+data/kb/*/chunks.jsonl
+data/eval/results/
+.cache/
+.huggingface/
+
+# Course materials & coursework (copyright / plagiarism-detection risk on public push)
+data/kb/5033/
+data/kb/cs4303/
+data/kb/cs4303_ctx/
+data/kb/cs4303_qdrant/
+
+# Logs
+*.log
+logs/
+storage/service_logs/
+
+# IDE
+.idea/
+.vscode/
+*.swp

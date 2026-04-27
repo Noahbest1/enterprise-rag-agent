@@ -1,0 +1,33 @@
+{
+  "source_id": "ISSUE-1427",
+  "source_type": "issue",
+  "title": "Large tenant sync may timeout after cache miss spike",
+  "language": "zh-CN",
+  "access_level": "internal",
+  "product_area": "integration",
+  "body_format": "sectioned_text",
+  "tags": ["issue", "sync", "timeout", "cache-miss"],
+  "updated_at": "2026-03-14T19:20:00Z",
+  "metadata": {
+    "status": "closed",
+    "priority": "p1",
+    "linked_release": "2026.03"
+  },
+  "sections": [
+    {
+      "section_id": "summary",
+      "title": "问题摘要",
+      "text": "当大租户一次提交超过 300 个对象时，tenant-sync worker 在 cache miss 增长后容易出现链路阻塞，最终返回 504。该问题在 strategic accounts 中更容易暴露，因为对象关系图更复杂。"
+    },
+    {
+      "section_id": "repro",
+      "title": "复现条件",
+      "text": "使用插件 3.4.1，批次大小 300，重试间隔 1 秒，tenant graph 较深时可以稳定复现。若降低批次到 100 并升级到插件 3.4.2，超时明显减少。"
+    },
+    {
+      "section_id": "resolution",
+      "title": "结论",
+      "text": "问题由 cache key 复用和过大的同步批次共同触发。后端修复已进入 2026.03，支持 workaround 是降低批次大小、延长重试间隔并指导客户升级插件。"
+    }
+  ]
+}

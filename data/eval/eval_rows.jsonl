@@ -1,0 +1,84 @@
+{"query": "What is Airbyte?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/getting-started/academy", "airbyte_demo::AIRBYTE::docs::docs/getting-started/oss-quickstart", "airbyte_demo::AIRBYTE::docs::docs/overview/README"], "category": "direct"}
+{"query": "How do I set up a connection in Airbyte?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/getting-started/set-up-a-connection"], "category": "direct"}
+{"query": "How do I add a source?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/getting-started/add-a-source"], "category": "direct"}
+{"query": "How do I add a destination?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/getting-started/add-a-destination"], "category": "direct"}
+{"query": "Which Airbyte version introduced connection tags?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::release_notes::release_notes/v-1.5"], "category": "direct"}
+{"query": "What changed in Airbyte 1.7?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::release_notes::release_notes/v-1.7"], "category": "direct"}
+{"query": "How do I troubleshoot MySQL source errors?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::faq::faq/troubleshooting/mysql-source"], "category": "direct"}
+{"query": "Airbyte 是什么", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/getting-started/academy", "airbyte_demo::AIRBYTE::docs::docs/getting-started/oss-quickstart", "airbyte_demo::AIRBYTE::docs::docs/overview/README"], "category": "direct"}
+{"query": "怎么在 Airbyte 中新建一个连接", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/getting-started/set-up-a-connection"], "category": "direct"}
+{"query": "如何添加一个数据源", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/getting-started/add-a-source"], "category": "direct"}
+{"query": "连接标签是哪个版本新增的", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::release_notes::release_notes/v-1.5"], "category": "direct"}
+{"query": "Airbyte 1.7 更新了什么", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::release_notes::release_notes/v-1.7"], "category": "direct"}
+{"query": "MySQL 连接报错怎么办", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::faq::faq/troubleshooting/mysql-source"], "category": "direct"}
+{"query": "快速入门", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/getting-started/oss-quickstart"], "category": "direct"}
+{"query": "What is the deadline for this assignment?", "kb_id": "cs4303", "relevant_source_ids": ["cs4303::cs4303_p2::dfac5eae475d"], "category": "direct"}
+{"query": "这个作业占多少分", "kb_id": "cs4303", "relevant_source_ids": ["cs4303::cs4303_p2::dfac5eae475d"], "category": "direct"}
+{"query": "京东 PLUS 会员年卡多少钱", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::03_plus_membership::01963e4ae62c"], "category": "direct"}
+{"query": "京东自营商品退货流程是什么", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::01_return_policy::e6c83dff94fc"], "category": "direct"}
+{"query": "新疆地区京东自营的运费多少", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::02_shipping_policy::51030de30429"], "category": "direct"}
+{"query": "京东保价政策是多少天内可以申请", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::04_aftersale::085956df6a65"], "category": "direct"}
+{"query": "88VIP 的开通条件是什么", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::03_88vip::602198467c08"], "category": "direct"}
+{"query": "淘宝运费险一般赔多少钱", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::02_freight_insurance::d53dd7a467d5"], "category": "direct"}
+{"query": "淘宝商家多久必须响应售后申请", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::04_dispute::30c304150720"], "category": "direct"}
+{"query": "淘宝双十一大促一般什么时候", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::06_promotions::1c88a40f2273"], "category": "direct"}
+{"query": "airbyte 1.7 有啥新东西", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::release_notes::release_notes/v-1.7"], "category": "adversarial"}
+{"query": "Airbyte v2.0 when did it come out", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::release_notes::release_notes/v-2.0"], "category": "adversarial"}
+{"query": "PLUS 会员到底能便宜多少", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::03_plus_membership::01963e4ae62c"], "category": "adversarial"}
+{"query": "airbyte 是啥做啥用的", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/overview/README", "airbyte_demo::AIRBYTE::docs::docs/getting-started/academy", "airbyte_demo::AIRBYTE::docs::docs/getting-started/oss-quickstart"], "category": "adversarial"}
+{"query": "京东的退款要几天才到账啊", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::01_return_policy::e6c83dff94fc", "jd_demo::04_aftersale::085956df6a65"], "category": "adversarial"}
+{"query": "Taobao 88vip 跨平台权益 benefits", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::03_88vip::602198467c08"], "category": "adversarial"}
+{"query": "Airbyte scaling 要怎么搞", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/operator-guides/scaling-airbyte"], "category": "adversarial"}
+{"query": "mysql 连不上咋整", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::faq::faq/troubleshooting/mysql-source"], "category": "adversarial"}
+{"query": "淘宝退货到底是几天内要申请", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::01_seven_day_return::e5e93d7c381e"], "category": "adversarial"}
+{"query": "iPhone 16 京东自营咋买", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::05_products::e79c9a811b0b"], "category": "adversarial"}
+{"query": "京东 PLUS 会员的价格和运费优惠分别是什么", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::03_plus_membership::01963e4ae62c", "jd_demo::02_shipping_policy::51030de30429"], "category": "multi_hop"}
+{"query": "京东 7 天无理由退货的流程是什么?退款多久能到银行卡?", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::01_return_policy::e6c83dff94fc", "jd_demo::04_aftersale::085956df6a65"], "category": "multi_hop"}
+{"query": "iPhone 16 Pro 在京东多少钱?该商品如何申请 7 天无理由退货?", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::05_products::e79c9a811b0b", "jd_demo::01_return_policy::e6c83dff94fc"], "category": "multi_hop"}
+{"query": "Airbyte 1.5 和 1.7 分别有什么重要更新?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::release_notes::release_notes/v-1.5", "airbyte_demo::AIRBYTE::release_notes::release_notes/v-1.7"], "category": "multi_hop"}
+{"query": "How do I add both a source and a destination in Airbyte?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/getting-started/add-a-source", "airbyte_demo::AIRBYTE::docs::docs/getting-started/add-a-destination"], "category": "multi_hop"}
+{"query": "淘宝买家如何申请售后?运费险的理赔金额是多少?", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::04_dispute::30c304150720", "taobao_demo::02_freight_insurance::d53dd7a467d5"], "category": "multi_hop"}
+{"query": "淘宝双十一大促是什么时候?88VIP 在大促中有什么额外折扣?", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::06_promotions::1c88a40f2273", "taobao_demo::03_88vip::602198467c08"], "category": "multi_hop"}
+{"query": "京东自营和第三方在 7 天无理由政策上有何区别?大件商品 PLUS 会员是否包邮?", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::01_return_policy::e6c83dff94fc", "jd_demo::02_shipping_policy::51030de30429"], "category": "multi_hop"}
+{"query": "Airbyte OSS quickstart 怎么做,启动后如何添加第一个 source?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/getting-started/oss-quickstart", "airbyte_demo::AIRBYTE::docs::docs/getting-started/add-a-source"], "category": "multi_hop"}
+{"query": "京东优惠券(京券)怎么用?PLUS 会员每月有几张免费运费券?", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::06_coupons::5b8f6b7dd69d", "jd_demo::03_plus_membership::01963e4ae62c"], "category": "multi_hop"}
+{"query": "今天北京天气怎么样", "kb_id": "jd_demo", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "SpaceX 最近一次发射是什么时候", "kb_id": "jd_demo", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "北京地铁 10 号线首班车几点", "kb_id": "taobao_demo", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "肯尼迪总统是哪一年遇刺的", "kb_id": "taobao_demo", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "京东 PLUS 会员多少钱", "kb_id": "airbyte_demo", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "淘宝运费险赔多少钱", "kb_id": "airbyte_demo", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "今天沪深 300 指数多少点", "kb_id": "cs4303", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "上一届奥运会在哪个城市举办", "kb_id": "cs4303", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "Python 怎么读取 JSON 文件", "kb_id": "jd_demo", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "冰岛最近有没有火山喷发", "kb_id": "taobao_demo", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "How do I collect Airbyte metrics?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/operator-guides/collecting-metrics"], "category": "direct"}
+{"query": "如何升级 Airbyte", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/operator-guides/upgrading-airbyte"], "category": "direct"}
+{"query": "Postgres source 支持 schema 变更吗", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::faq::faq/troubleshooting/postgres-source"], "category": "direct"}
+{"query": "Airbyte 2.0 有什么新功能", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::release_notes::release_notes/v-2.0"], "category": "direct"}
+{"query": "iPhone 16 Pro 在京东卖多少钱", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::05_products::e79c9a811b0b"], "category": "direct"}
+{"query": "京豆能当现金用吗", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::03_plus_membership::01963e4ae62c"], "category": "direct"}
+{"query": "京券和店铺优惠券能一起用吗", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::06_coupons::5b8f6b7dd69d"], "category": "direct"}
+{"query": "淘宝商家多长时间不响应会视为默认同意", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::04_dispute::30c304150720"], "category": "direct"}
+{"query": "淘气值满多少可以开通 88VIP", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::03_88vip::602198467c08"], "category": "direct"}
+{"query": "88VIP 购买天猫商品打几折", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::03_88vip::602198467c08"], "category": "direct"}
+{"query": "aribyte 怎么装", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/getting-started/oss-quickstart"], "category": "adversarial"}
+{"query": "jd plus 一年到底多少钱啊", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::03_plus_membership::01963e4ae62c"], "category": "adversarial"}
+{"query": "88vip 有啥福利", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::03_88vip::602198467c08"], "category": "adversarial"}
+{"query": "iphone 在京东保修几年", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::05_products::e79c9a811b0b"], "category": "adversarial"}
+{"query": "airbyte 最新版本是哪个", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::release_notes::release_notes/v-2.1", "airbyte_demo::AIRBYTE::release_notes::release_notes/v-2.0"], "category": "adversarial"}
+{"query": "airbyte 要不要花钱", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/overview/README"], "category": "adversarial"}
+{"query": "淘宝生鲜能退货吗", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::01_seven_day_return::e5e93d7c381e"], "category": "adversarial"}
+{"query": "京东图书满多少免邮", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::02_shipping_policy::51030de30429"], "category": "adversarial"}
+{"query": "Airbyte 1.5 和 2.0 之间主要的性能改进是什么", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::release_notes::release_notes/v-1.5", "airbyte_demo::AIRBYTE::release_notes::release_notes/v-2.0"], "category": "multi_hop"}
+{"query": "京东保价政策是什么?iPhone 16 Pro 价格多少?", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::04_aftersale::085956df6a65", "jd_demo::05_products::e79c9a811b0b"], "category": "multi_hop"}
+{"query": "淘宝 88VIP 年费多少?运费险的赔付规则是什么?", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::03_88vip::602198467c08", "taobao_demo::02_freight_insurance::d53dd7a467d5"], "category": "multi_hop"}
+{"query": "京东 PLUS 会员有什么运费权益?PLUS 年卡价格多少?", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::02_shipping_policy::51030de30429", "jd_demo::03_plus_membership::01963e4ae62c"], "category": "multi_hop"}
+{"query": "Airbyte 如何查看同步日志?又如何配置连接器资源?", "kb_id": "airbyte_demo", "relevant_source_ids": ["airbyte_demo::AIRBYTE::docs::docs/operator-guides/browsing-output-logs", "airbyte_demo::AIRBYTE::docs::docs/operator-guides/configuring-connector-resources"], "category": "multi_hop"}
+{"query": "京东自营商品有质量问题,7 天和 15 天保障有什么区别?", "kb_id": "jd_demo", "relevant_source_ids": ["jd_demo::01_return_policy::e6c83dff94fc", "jd_demo::04_aftersale::085956df6a65"], "category": "multi_hop"}
+{"query": "淘宝双十一 88VIP 额外享受什么?双十一有哪些主要玩法?", "kb_id": "taobao_demo", "relevant_source_ids": ["taobao_demo::03_88vip::602198467c08", "taobao_demo::06_promotions::1c88a40f2273"], "category": "multi_hop"}
+{"query": "埃菲尔铁塔高多少米", "kb_id": "airbyte_demo", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "红烧肉怎么做", "kb_id": "jd_demo", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "世界杯上届冠军是哪个国家", "kb_id": "taobao_demo", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "拿破仑出生在哪里", "kb_id": "cs4303", "relevant_source_ids": [], "category": "out_of_domain"}
+{"query": "比特币现在多少钱", "kb_id": "airbyte_demo", "relevant_source_ids": [], "category": "out_of_domain"}

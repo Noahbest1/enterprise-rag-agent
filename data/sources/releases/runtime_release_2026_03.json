@@ -1,0 +1,27 @@
+{
+  "source_id": "RELEASE-2026-03",
+  "source_type": "release",
+  "title": "Runtime Release 2026.03",
+  "language": "zh-CN",
+  "access_level": "internal",
+  "product_area": "platform-runtime",
+  "body_format": "sectioned_text",
+  "tags": ["release", "runtime", "tenant-sync"],
+  "updated_at": "2026-03-15T08:00:00Z",
+  "metadata": {
+    "version": "2026.03",
+    "release_channel": "stable"
+  },
+  "sections": [
+    {
+      "section_id": "fixes",
+      "title": "修复项",
+      "text": "修复 tenant-sync worker 在大租户批量同步时错误复用旧的 cache key，导致请求等待链路异常拉长的问题。该修复降低了高并发情况下的 cache contention，并减少了 SYNC-504 的误报。"
+    },
+    {
+      "section_id": "notes",
+      "title": "发布说明",
+      "text": "升级到 2026.03 后，建议客户将同步插件版本升级到 3.4.2 或更高版本。对于仍使用旧插件的客户，支持团队需要优先确认插件版本，再判断是否属于后端超时。"
+    }
+  ]
+}

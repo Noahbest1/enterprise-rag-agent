@@ -1,0 +1,100 @@
+[
+  {
+    "category": "issues",
+    "issue_number": 75277,
+    "search_topic": "cdc",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/75277",
+    "notes": "Postgres CDC self-hosted support request about skipping the initial snapshot and starting from the current WAL position."
+  },
+  {
+    "category": "issues",
+    "issue_number": 13442,
+    "search_topic": "cdc",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/13442",
+    "notes": "Postgres CDC bug report for partitioned tables."
+  },
+  {
+    "category": "issues",
+    "issue_number": 27510,
+    "search_topic": "cdc",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/27510",
+    "notes": "Postgres CDC sync failure involving interval column types."
+  },
+  {
+    "category": "issues",
+    "issue_number": 72936,
+    "search_topic": "cdc",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/72936",
+    "notes": "Postgres incremental cursor reset issue relevant to source state handling."
+  },
+  {
+    "category": "issues",
+    "issue_number": 61586,
+    "search_topic": "auth",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/61586",
+    "notes": "Authentication and cookie behavior regression in abctl installs."
+  },
+  {
+    "category": "issues",
+    "issue_number": 66156,
+    "search_topic": "auth",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/66156",
+    "notes": "Secure cookie configuration issue in self-managed deployments."
+  },
+  {
+    "category": "issues",
+    "issue_number": 65608,
+    "search_topic": "auth",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/65608",
+    "notes": "Authentication and account setup problem where email appears unset."
+  },
+  {
+    "category": "issues",
+    "issue_number": 70917,
+    "search_topic": "telemetry",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/70917",
+    "notes": "Operational metrics issue where sync job metrics are missing."
+  },
+  {
+    "category": "issues",
+    "issue_number": 57556,
+    "search_topic": "telemetry",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/57556",
+    "notes": "Datadog metrics regression tied to a versioned release."
+  },
+  {
+    "category": "issues",
+    "issue_number": 36045,
+    "search_topic": "telemetry",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/36045",
+    "notes": "OpenTelemetry endpoint configuration failure."
+  },
+  {
+    "category": "issues",
+    "issue_number": 35132,
+    "search_topic": "telemetry",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/35132",
+    "notes": "Helm metric reporter bug for OTEL endpoint configuration."
+  },
+  {
+    "category": "issues",
+    "issue_number": 44447,
+    "search_topic": "scaling",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/44447",
+    "notes": "Scaling issue involving PGBouncer and connection instability."
+  },
+  {
+    "category": "issues",
+    "issue_number": 18516,
+    "search_topic": "scaling",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/18516",
+    "notes": "Initial deployment timeout and server deadline issue."
+  },
+  {
+    "category": "issues",
+    "issue_number": 29431,
+    "search_topic": "connections",
+    "source_url": "https://github.com/airbytehq/airbyte/issues/29431",
+    "notes": "UI and connection setup mismatch where Postgres tables appear in logs but not in the UI."
+  }
+]

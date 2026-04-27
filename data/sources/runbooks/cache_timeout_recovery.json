@@ -1,0 +1,32 @@
+{
+  "source_id": "RUNBOOK-007",
+  "source_type": "runbook",
+  "title": "Cache Timeout Recovery Runbook",
+  "language": "zh-CN",
+  "access_level": "internal",
+  "product_area": "platform-runtime",
+  "body_format": "sectioned_text",
+  "tags": ["runbook", "cache", "timeout", "redis"],
+  "updated_at": "2026-03-26T11:45:00Z",
+  "metadata": {
+    "severity": "sev2",
+    "owner_team": "runtime"
+  },
+  "sections": [
+    {
+      "section_id": "symptoms",
+      "title": "触发症状",
+      "text": "当 Redis cache P95 延迟高于 80ms 且同步接口出现大面积 SYNC-504 时，支持团队应启动缓存超时排查流程。常见伴随信号包括 cache miss 增长、批量同步队列堆积、API gateway 504 数量在 10 分钟内持续增长。"
+    },
+    {
+      "section_id": "actions",
+      "title": "一级处置动作",
+      "text": "第一步，把 tenant-sync worker 并发从 12 降到 6。第二步，在 feature flag 中启用 adaptive batch split。第三步，如果 Redis hit ratio 低于 0.85，执行 cache warmup job。第四步，通知支持同学在客户侧把同步批次控制在 50 到 100 条，并把重试间隔提高到至少 3 秒。"
+    },
+    {
+      "section_id": "escalation",
+      "title": "升级条件",
+      "text": "若 15 分钟后 P95 仍高于 80ms，或者企业客户仍然持续报错，应升级给 runtime oncall。若单个客户受到影响且该客户为 strategic account，需要同时创建 Jira 并附上错误码、批次大小、最近版本和截图证据。"
+    }
+  ]
+}

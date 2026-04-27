@@ -1,0 +1,25 @@
+{
+  "_about": "Reference metrics the regression gate checks against. Update deliberately after a verified improvement, never to mask a regression.",
+  "_source_dataset": "data/eval/eval_rows.jsonl (84 rows: 34 direct / 18 adversarial / 17 multi_hop / 15 out_of_domain)",
+  "_set_at": "2026-04-23",
+  "_tolerance": 0.02,
+  "_mode": "rewrite=off, rerank=on, multi_query=off. Gate disables LLM rewrite to stay deterministic; run_eval.py uses defaults (rewrite=on).",
+  "_notes": [
+    "2026-04-23 re-baselined after eval expansion 54 -> 84 rows.",
+    "Hit@1 expected to be lower than the 54-row baseline because multi_hop/adversarial rows are harder to rank first; Hit@5 actually improved (0.909 -> 0.942) because top-5 is forgiving.",
+    "2026-04-24 Step E: rebuilt 3 KBs (jd_demo / taobao_demo / cs4303) with Contextual Retrieval prefixes. Rewrite=off (gate) barely moved -- MRR@10 nudged 0.841 -> 0.843. Rewrite=on user-facing path moved more: Hit@1 0.773 -> 0.797, MRR@10 0.859 -> 0.878, multi_hop bucket MRR 0.941 -> 0.971. airbyte_demo skipped (connector-sourced, no local raw)."
+  ],
+  "retrieval": {
+    "hit_at_1": 0.754,
+    "hit_at_3": 0.942,
+    "hit_at_5": 0.942,
+    "mrr_at_10": 0.843
+  },
+  "answer": {
+    "_subset": "first 20 rows after out_of_domain is filtered out (direct + adversarial + multi_hop)",
+    "faithful": 0.900,
+    "cites_correctly": 0.900,
+    "answers_question": 0.950,
+    "abstain_correct": 0.950
+  }
+}
