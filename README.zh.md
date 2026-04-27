@@ -55,49 +55,73 @@
 
 ## 1. 架构总览
 
-```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                  Vite + React SPA(单 bundle,4 个路由)                    │
-│   /            ?view=upload       ?view=stream    ?view=agent   ?view=admin │
-│  Landing       拖拽建 KB         RAG 流式问答    9-specialist  客服后台    │
-│   │                │                  │              │            │      │
-│   └─────────┬──────┴──────┬───────────┴──────┬───────┴────┬───────┘      │
-│             ▼             ▼                  ▼            ▼              │
-└─────────────│─────────────│──────────────────│────────────│──────────────┘
-              │             │                  │            │
-              │   POST /kbs/{id}/upload        SSE: /agent/chat / /users/{id}/events
-              │   POST /answer/stream                                       │
-              ▼             ▼                  ▼            ▼              │
-┌──────────────────────────────────────────────────────────────────────────┐
-│                          FastAPI(async)端口 8008                         │
-│  ┌─────────────────────────┐    ┌─────────────────────────────────────┐  │
-│  │  RAG pipeline           │    │  Agent(LangGraph Plan-and-Execute) │  │
-│  │  ─────────────          │    │  ─────────────────────────────────  │  │
-│  │  1. NFKC 归一化         │    │   planner ─► advance ─┐             │  │
-│  │  2. LLM 跨语言改写       │    │                       ▼             │  │
-│  │  3. 混合检索             │    │   ┌──── 9 specialists ───┐          │  │
-│  │     • BM25(FTS5 CJK)   │◀───┤   │ product_qa  ──┐      │          │  │
-│  │     • Dense BGE-M3      │    │   │ policy_qa   ──┼─→ RAG│ ◀────┐   │  │
-│  │     • RRF + 交叉重排     │    │   │ order        │       │     │   │  │
-│  │  4. MMR 多样化           │    │   │ logistics   ─┘       │     │   │  │
-│  │  5. Grounded LLM         │    │   │ aftersale   ─→ DB    │     │   │  │
-│  │     [n] 引用             │    │   │ recommend   ─→ vec   │     │   │  │
-│  │  6. 弃答(低分)         │    │   │ invoice     ─→ DB+PDF│     │   │  │
-│  │  7. 幻觉校验(qwen-turbo)│    │   │ complaint   ─→ DB+SSE│     │   │  │
-│  │                         │    │   │ account     ─→ DB+SMS│     │   │  │
-│  │                         │    │   └──────────────────────┘     │   │  │
-│  │                         │    │       ▲                        │   │  │
-│  │                         │    │  4 层 Agent 记忆:              │   │  │
-│  │                         │    │  • messages                     │   │  │
-│  │                         │    │  • entities(last_order_id...) │   │  │
-│  │                         │    │  • LangGraph AsyncSqliteSaver  │   │  │
-│  │                         │    │    checkpoint(per thread_id)  │   │  │
-│  │                         │    │  • UserPreference(永久跨会话)  │   │  │
-│  └─────────────────────────┘    └─────────────────────────────────────┘  │
-│                                                                          │
-│  多模态 · 鉴权 · 限流 · token 预算 · 审计(仅哈希)                         │
-│  Prometheus /metrics · OpenTelemetry traces · MCP server(7 tools)        │
-└──────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph FE["🎨 前端 — Vite + React SPA · 5 路由"]
+        direction LR
+        L["/<br>Landing"]
+        U["?view=upload<br>📤 拖拽建 KB"]
+        S["?view=stream<br>💬 RAG 流式"]
+        A["?view=agent<br>🤖 智能客服"]
+        AD["?view=admin<br>🎧 客服后台"]
+    end
+
+    FE ==>|HTTP / SSE| API
+
+    subgraph API["⚙️ FastAPI async · 端口 8008"]
+        direction TB
+
+        subgraph RAG["🔍 RAG pipeline"]
+            R1["归一化 → LLM 改写<br>BM25(FTS5 unicode61)<br>BGE-M3 稠密向量<br>RRF + bge-reranker<br>MMR 多样化<br>parent-expand 父扩展<br>Grounded LLM + [n] 引用<br>弃答 · 幻觉校验"]
+        end
+
+        subgraph AGENT["🤖 LangGraph Agent · Plan-and-Execute"]
+            PL["planner"] --> ADV["advance"]
+            ADV --> SP["9 个 specialist<br>product_qa · policy_qa<br>order · logistics<br>aftersale · recommend<br>invoice · complaint · account"]
+            SP --> ADV
+        end
+
+        AGENT -.product_qa / policy_qa<br>调用.-> RAG
+    end
+
+    subgraph MEM["🧠 4 层 Agent 记忆"]
+        direction TB
+        M1["L1 当轮 messages"]
+        M2["L2 当轮 entities<br>last_order_id ..."]
+        M3["L3 跨会话 checkpoint<br>AsyncSqliteSaver / thread_id"]
+        M4["L4 永久 user_preferences<br>(自动注入 Planner)"]
+    end
+
+    subgraph DATA["💾 存储"]
+        direction LR
+        DB[("Postgres + alembic<br>orders · complaints · sessions<br>user_preferences<br>audit_logs(仅 sha256[:16])")]
+        VS[("向量后端<br>FAISS · Qdrant · PGVector")]
+        CK[("data/langgraph.sqlite<br>(AsyncSqliteSaver)")]
+    end
+
+    API ==> MEM
+    API ==> DATA
+
+    subgraph OPS["🛡 横切能力"]
+        direction LR
+        O1["多模态<br>CLIP + Qwen-VL"]
+        O2["MCP Server<br>7 tools / 2 res / 3 prompts"]
+        O3["鉴权 · 限流<br>Token 预算"]
+        O4["Prometheus + OTel<br>仅哈希审计"]
+    end
+
+    API -.- OPS
+
+    classDef api fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef mem fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef data fill:#d1fae5,stroke:#059669,color:#064e3b
+    classDef fe fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+    classDef ops fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+    class API api
+    class MEM mem
+    class DATA data
+    class FE fe
+    class OPS ops
 ```
 
 ---
