@@ -68,6 +68,17 @@ for the full story):
 
 ---
 
+## Screenshots
+
+| | | |
+|---|---|---|
+| ![Landing](docs/screenshots/cs-01.png) | ![Agent multi-step](docs/screenshots/cs-02.png) | ![RAG streaming](docs/screenshots/cs-03.png) |
+| **Landing** — Agent 主入口 + RAG / 上传 / 客服后台 三副入口,首屏即看到 4 个已索引 KB | **Agent multi-step** — Plan-and-Execute 派发 `order` specialist,展开订单卡 + 4-layer memory 的 entities chip 可见 | **RAG streaming** — `rewritten →` 跨语言改写 + grounded LLM 答案 + 内联 `[n]` 引用 + 来源 chunk 展开 |
+| ![Aftersale flow](docs/screenshots/cs-04.png) | ![Complaint ticket](docs/screenshots/cs-05.png) | ![Admin console](docs/screenshots/cs-06.png) |
+| **Aftersale flow** — `policy_qa` + `aftersale` 多 specialist 协作,弹出"此单退货"按钮,点击后 R-N 已提交 + DB 写入审计 | **Complaint ticket** — `complaint` specialist 干跑预览,用户点提交后真正落库 + 自动升级人工,工单卡内可双向对话 | **Admin console** — 客服后台工单队列(SLA / 升级标记)+ 双向气泡(用户↔客服)+ SSE 实时推送回用户聊天页 |
+
+---
+
 ## 1. Architecture
 
 ```mermaid

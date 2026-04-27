@@ -53,6 +53,17 @@
 
 ---
 
+## 截图速览
+
+| | | |
+|---|---|---|
+| ![首页](docs/screenshots/cs-01.png) | ![Agent 多步](docs/screenshots/cs-02.png) | ![RAG 流式](docs/screenshots/cs-03.png) |
+| **首页** — Agent 是主入口,RAG / 上传 / 客服后台是 3 个副入口;首屏即看到 4 个已索引 KB | **Agent 多步任务** — Plan-and-Execute 自动派发到 `order` specialist,展开订单卡 + 底部 entities chip 可见 4 层记忆 | **RAG 流式** — `rewritten →` 跨语言改写 + grounded LLM 答案 + 内联 `[n]` 引用 + 来源 chunk 展开 |
+| ![售后流程](docs/screenshots/cs-04.png) | ![投诉工单](docs/screenshots/cs-05.png) | ![客服后台](docs/screenshots/cs-06.png) |
+| **售后流程** — `policy_qa` + `aftersale` 多 specialist 协作,出现"此单退货"按钮,点击后 R-N 已提交 + 审计落库 | **投诉工单** — `complaint` specialist 干跑预览,用户点提交后真落库 + 自动升级人工,工单卡内可双向对话 | **客服后台** — 工单队列(SLA / 升级标记) + 双向气泡(用户↔客服)+ SSE 实时推送回用户聊天页 |
+
+---
+
 ## 1. 架构总览
 
 ```mermaid
