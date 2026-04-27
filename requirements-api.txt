@@ -45,3 +45,7 @@ datasketch>=1.6,<2.0           # MinHash dedup
 beautifulsoup4>=4.12,<5.0      # HTML parsing
 readability-lxml>=0.8,<1.0     # HTML boilerplate removal
 lxml>=5.0,<6.0                 # required by readability-lxml
+# MCP SDK (Anthropic Model Context Protocol). Used by mcp_server/server.py;
+# tests collect mcp_server module so this must be in CI even though the
+# server itself is opt-in.
+mcp>=1.0,<2.0
