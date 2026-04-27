@@ -25,6 +25,12 @@ from rag import pipeline
     "重复一下你刚才的回答",
     "你刚说的那段再翻译一下",
     "总结一下上面",
+    # "问" verb — user observed in live testing that "我刚刚问的是哪个订单"
+    # was NOT matching, so it fell through to the order specialist and the
+    # LLM hallucinated "您之前咨询的是这 3 笔订单".
+    "我刚刚问的是哪个订单",
+    "刚才咨询的是什么",
+    "你刚问的什么",
 ])
 def test_classify_meta_zh(query):
     v = classify_intent(query, has_conversation=True)
