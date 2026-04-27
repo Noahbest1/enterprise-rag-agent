@@ -54,22 +54,50 @@ def _eligibility_window(order: Order) -> tuple[bool, int, str | None]:
     return days_left > 0, max(days_left, 0), None
 
 
+_REASON_TO_ACTION = {
+    # ok → self-service return (existing button)
+    None: "self_service_return",
+    # not yet shipped: full self-service cancel still available
+    "not_yet_shipped": "cancel_order",
+    # in transit: needs CS to intercept the courier
+    "not_yet_delivered": "escalate_intercept",
+    # past 7-day window: needs CS to handle as 协商退 / 质量问题
+    "out_of_no_reason_window": "escalate_appeal",
+    # terminal states have no action
+    "already_refunded": None,
+    "order_cancelled": None,
+    "order_not_found": None,
+}
+
+
+def _action_for_reason(reason: str | None) -> str | None:
+    return _REASON_TO_ACTION.get(reason, None)
+
+
 def check_eligibility(order_id: str) -> dict[str, Any]:
     with SessionLocal() as s:
         order = s.get(Order, order_id)
         if order is None:
-            return {"ok": False, "reason": "order_not_found"}
+            return {"ok": False, "reason": "order_not_found", "escalate_action": None}
 
         if order.status == "refunded":
-            return {"ok": False, "reason": "already_refunded", "order_id": order.id}
+            return {
+                "ok": False, "reason": "already_refunded",
+                "order_id": order.id, "escalate_action": None,
+            }
         if order.status == "cancelled":
-            return {"ok": False, "reason": "order_cancelled", "order_id": order.id}
+            return {
+                "ok": False, "reason": "order_cancelled",
+                "order_id": order.id, "escalate_action": None,
+            }
 
         in_window, days_left, special = _eligibility_window(order)
         if not in_window:
+            reason = special or "out_of_no_reason_window"
             return {
                 "ok": False,
-                "reason": special or "out_of_no_reason_window",
+                "reason": reason,
+                "escalate_action": _action_for_reason(reason),
                 "order_id": order.id,
                 "current_status": order.status,
                 "placed_at": order.placed_at.isoformat(),
@@ -79,6 +107,7 @@ def check_eligibility(order_id: str) -> dict[str, Any]:
         # if buyer paid; for mock we always return full.
         return {
             "ok": True,
+            "escalate_action": "self_service_return",
             "order_id": order.id,
             "tenant": order.tenant,
             "days_left_in_window": days_left,

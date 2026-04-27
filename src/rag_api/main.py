@@ -467,6 +467,41 @@ def action_confirm_return(
     return {"ok": True, "request": rr, "eligibility": elig}
 
 
+class CancelOrderRequest(BaseModel):
+    order_id: str
+
+
+@app.post("/agent/actions/cancel-order")
+def action_cancel_order(
+    req: CancelOrderRequest,
+    auth: AuthContext = Depends(require_api_key),
+):
+    """User clicks '取消订单' on a not-yet-shipped order. Self-service path
+    that bypasses the return / complaint flow because the merchandise has
+    not left the warehouse — no logistics or human intervention needed.
+
+    Returns 409 if the order is past the cancellable window (shipped /
+    delivered / refunded / already cancelled). The UI is expected to
+    fall back to the complaint-escalation flow in those cases.
+    """
+    from agent.tools.orders import cancel_order
+    result = cancel_order(req.order_id)
+    if not result.get("ok"):
+        raise HTTPException(status_code=409, detail=result.get("reason") or "not_cancellable")
+
+    from .audit import record_audit
+    record_audit(
+        event_type="order_cancelled",
+        tenant_id=None, user_id=None,
+        extra={
+            "order_id": req.order_id,
+            "previous_status": result.get("previous_status"),
+            "refunded_cents": result.get("refunded_cents"),
+        },
+    )
+    return {"ok": True, "result": result}
+
+
 class SetDefaultAddressRequest(BaseModel):
     user_id: str
     address_id: int

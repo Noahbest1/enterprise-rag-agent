@@ -5,10 +5,68 @@ plain dicts -- never ORM objects -- so the state graph can serialise them.
 """
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 from sqlalchemy import desc, select
 
 from rag.db.base import SessionLocal
 from rag.db.models import Order, User
+
+
+# Order statuses that the user can self-cancel without involving CS.
+# Once the order leaves the warehouse (shipped / delivered) cancellation
+# is no longer "free" — the user has to go through the complaint /
+# refund flow with human agents.
+CANCELLABLE_STATUSES = {"placed", "paid"}
+
+
+def cancel_order(order_id: str) -> dict:
+    """Self-service cancel: only allowed before shipment.
+
+    Returns:
+        ok=True path: {"ok": True, "order_id", "previous_status",
+        "current_status": "cancelled", "refunded_cents"}
+        ok=False path: {"ok": False, "reason", ...}
+
+    The 4 reason codes mirror the eligibility ones so the front-end can
+    use the same renderer:
+    - "order_not_found"
+    - "already_cancelled"
+    - "already_refunded"
+    - "not_cancellable_after_shipping" — past the self-service window;
+      the user should escalate to a human via complaint.
+    """
+    with SessionLocal() as s:
+        o = s.get(Order, order_id)
+        if o is None:
+            return {"ok": False, "reason": "order_not_found"}
+        if o.status == "cancelled":
+            return {"ok": False, "reason": "already_cancelled", "order_id": o.id}
+        if o.status == "refunded":
+            return {"ok": False, "reason": "already_refunded", "order_id": o.id}
+        if o.status not in CANCELLABLE_STATUSES:
+            return {
+                "ok": False,
+                "reason": "not_cancellable_after_shipping",
+                "order_id": o.id,
+                "current_status": o.status,
+            }
+
+        previous_status = o.status
+        o.status = "cancelled"
+        # In a real platform the refund timing would depend on payment
+        # method. For demo we just record cents so callers can show
+        # "全额退款 ¥XXX" feedback.
+        refunded_cents = o.total_cents
+        s.commit()
+        return {
+            "ok": True,
+            "order_id": o.id,
+            "previous_status": previous_status,
+            "current_status": "cancelled",
+            "refunded_cents": refunded_cents,
+            "cancelled_at": datetime.now(timezone.utc).isoformat(),
+        }
 
 
 def _order_to_dict(o: Order) -> dict:

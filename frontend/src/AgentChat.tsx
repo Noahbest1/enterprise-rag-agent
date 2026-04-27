@@ -1002,6 +1002,8 @@ type OrderShape = {
   tracking_no?: string | null;
   carrier?: string | null;
   placed_at?: string;
+  tenant?: string;
+  user_id?: string;
   items?: OrderItem[];
 };
 
@@ -1067,8 +1069,18 @@ function OrderCard({ order }: { order: OrderShape }) {
   const [submitted, setSubmitted] = useState<{ id?: number; status?: string } | null>(null);
   const placed = order.placed_at ? new Date(order.placed_at).toLocaleString("zh-CN", { hour12: false }) : "";
   // 7-day no-reason return eligibility: server is the source of truth, but
-  // client can hide the button on obviously-terminal states.
-  const returnable = !["refunded", "cancelled"].includes((order.status || "").toLowerCase());
+  // Status-aware action: each order state maps to a specific user-action,
+  // mirroring real e-commerce flows. The 4 buckets:
+  //  placed / paid  → 取消订单 (self-service, no shipment yet)
+  //  shipped        → 联系客服拦截 (CS handles courier interception)
+  //  delivered      → 此单退货 (7-day no-reason self-service)
+  //  cancelled / refunded → no action
+  const status = (order.status || "").toLowerCase();
+  const action: "cancel" | "escalate" | "return" | null =
+    status === "delivered" ? "return"
+    : (status === "placed" || status === "paid") ? "cancel"
+    : status === "shipped" ? "escalate"
+    : null;
 
   async function onReturn() {
     const r = await postAction("/agent/actions/confirm-return",
@@ -1080,6 +1092,38 @@ function OrderCard({ order }: { order: OrderShape }) {
       toast(`订单 ${order.id} 已提交退货 R-${rid ?? "?"},预计退款 ¥${refund}`, "success");
     } else {
       toast(`订单 ${order.id} 退货失败:${r.error}`, "error");
+    }
+  }
+
+  async function onCancelOrder() {
+    if (!confirm(`确认取消订单 ${order.id}?未发货可全额退款。`)) return;
+    const r = await postAction("/agent/actions/cancel-order", { order_id: order.id });
+    if (r.ok) {
+      const refund = ((r.data?.result?.refunded_cents ?? 0) / 100).toFixed(2);
+      toast(`订单 ${order.id} 已取消,全额退款 ¥${refund}`, "success");
+    } else {
+      toast(`取消失败:${r.error}`, "error");
+    }
+  }
+
+  async function onEscalate(topic: "delivery" | "refund", desc: string) {
+    // Escalate to a human agent via the complaint flow. We leverage the
+    // existing complaint tool — the order is in transit (shipped), or
+    // past the 7-day window, both of which need CS intervention.
+    const r = await postAction("/agent/actions/submit-complaint", {
+      tenant: order.tenant || "jd",
+      user_id: order.user_id,
+      order_id: order.id,
+      severity: "medium",
+      topic,
+      content: `${desc} (订单 ${order.id})`,
+      would_escalate: true,
+    });
+    if (r.ok) {
+      const cid = r.data?.complaint?.id;
+      toast(`已转人工客服(C-${cid ?? "?"}),稍后会主动联系您`, "success");
+    } else {
+      toast(`转人工失败:${r.error}`, "error");
     }
   }
 
@@ -1122,12 +1166,26 @@ function OrderCard({ order }: { order: OrderShape }) {
         )}
         {placed && <span style={{ color: "#888" }}>下单 {placed}</span>}
       </div>
-      {returnable && !submitted && (
+      {action && !submitted && (
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <button style={{ ...S.ghostBtn, padding: "4px 10px", fontSize: 12, color: "#0a84ff" }}
-                  onClick={onReturn}>
-            此单退货
-          </button>
+          {action === "return" && (
+            <button style={{ ...S.ghostBtn, padding: "4px 10px", fontSize: 12, color: "#0a84ff" }}
+                    onClick={onReturn}>
+              此单退货
+            </button>
+          )}
+          {action === "cancel" && (
+            <button style={{ ...S.ghostBtn, padding: "4px 10px", fontSize: 12, color: "#dc2626", borderColor: "#fecaca" }}
+                    onClick={onCancelOrder}>
+              取消订单
+            </button>
+          )}
+          {action === "escalate" && (
+            <button style={{ ...S.ghostBtn, padding: "4px 10px", fontSize: 12, color: "#f97316", borderColor: "#fed7aa" }}
+                    onClick={() => onEscalate("delivery", "用户希望中途拦截已发出的快递")}>
+              联系客服拦截
+            </button>
+          )}
         </div>
       )}
       {submitted && submitted.status !== "cancelled" && (
