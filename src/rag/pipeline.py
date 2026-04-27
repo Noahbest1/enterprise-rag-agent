@@ -156,7 +156,8 @@ def answer_query(
     # hallucinates a "summary" of unrelated KB chunks. Default ON.
     if getattr(settings, "enable_intent_routing", True):
         verdict = classify_intent(original, has_conversation=bool(conversation))
-        if verdict.intent == "meta" and conversation:
+        if verdict.intent == "meta":
+            # No-conversation case is handled by answer_meta_sync's fallback.
             text = answer_meta_sync(original, conversation, language)
             return Answer(
                 query=original, rewritten_query=original, text=text,
@@ -281,7 +282,11 @@ async def answer_query_async(
     # ---- Intent routing (skip retrieval for meta / chitchat) ----
     if getattr(settings, "enable_intent_routing", True):
         intent_v = classify_intent(original, has_conversation=bool(conversation))
-        if intent_v.intent == "meta" and conversation:
+        if intent_v.intent == "meta":
+            # answer_meta gracefully returns a "please rephrase" fallback
+            # when conversation is empty, so this short-circuit is safe
+            # in fresh sessions too — better than falling through to KB
+            # and hallucinating a "summary" of arbitrary chunks.
             text = await answer_meta(original, conversation, language)
             return Answer(
                 query=original, rewritten_query=original, text=text,
@@ -488,9 +493,7 @@ async def answer_query_stream(
     # the LLM reply as `delta` events, then `done` with no citations.
     if getattr(settings, "enable_intent_routing", True):
         intent_v = classify_intent(original, has_conversation=bool(conversation))
-        if intent_v.intent in ("meta", "chitchat") and not (
-            intent_v.intent == "meta" and not conversation
-        ):
+        if intent_v.intent in ("meta", "chitchat"):
             yield ("meta", {
                 "rewritten_query": original, "language": language,
                 "intent": intent_v.intent, "intent_matched": intent_v.matched,

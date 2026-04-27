@@ -122,7 +122,12 @@ async def _stream_agent_turn(req: AgentChatRequest) -> AsyncGenerator[str, None]
                 role = "assistant" if role == "ai" else ("user" if role == "human" else role)
                 conversation.append({"role": role, "content": getattr(m, "content", "") or ""})
         verdict = classify_intent(req.query, has_conversation=bool(conversation))
-        if verdict.intent == "meta" and conversation:
+        if verdict.intent == "meta":
+            # Even with empty conversation, short-circuit and let
+            # answer_meta return its polite "no prior turns" fallback.
+            # Falling back to the planner here causes the order specialist
+            # to list all of the user's orders and the LLM hallucinates
+            # "you previously asked about these" — a real bug we hit.
             language = detect_language(req.query)
             text = await answer_meta(req.query, conversation, language)
             yield _sse("answer", {

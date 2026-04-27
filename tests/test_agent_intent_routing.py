@@ -153,35 +153,47 @@ def test_agent_chitchat_skips_graph(client, monkeypatch):
     assert answer_events[0][1]["intent"] == "chitchat"
 
 
-def test_agent_meta_without_history_falls_back_to_graph(client, monkeypatch):
-    """Meta keyword + NO prior conversation → cannot answer from history,
-    so the Agent path must NOT short-circuit. We don't assert the graph
-    runs (mocking it is heavy), only that the response does NOT carry
-    intent=meta."""
+def test_agent_meta_without_history_short_circuits_with_fallback(client, monkeypatch):
+    """Meta keyword + NO prior conversation → still short-circuit (don't
+    run the graph), but return the meta handler's polite "no prior turns"
+    fallback. This is the bug we hit when a fresh session got
+    "我之前问的是哪个订单" routed to the order specialist, which listed
+    all orders and the LLM narrated "you previously asked about these"
+    (a hallucination).
+    """
     from rag_api import agent_routes as ar
-    # Force snapshot empty so has_prior=False
+    # Snapshot empty → has_prior=False, conversation=[]
     class _FakeGraph:
         async def aget_state(self, config):
             return None
 
         async def astream(self, *args, **kwargs):
-            # Emit a minimal set of fake events so the response completes.
-            yield {"planner": {"plan": [{"step_id": 1, "agent": "policy_qa", "query": "x", "depends_on": []}]}}
-            yield {"summary": {"final_answer": "fallback from real graph"}}
+            raise AssertionError("astream must NOT be called on meta path")
+            yield  # pragma: no cover
 
     monkeypatch.setattr(ar, "build_graph", lambda **kw: _FakeGraph())
     import agent.tools.sessions as sessions_mod
     monkeypatch.setattr(sessions_mod, "touch_session", lambda **kw: None)
 
+    # Stub the meta handler to return a known fallback string.
+    async def fake_answer_meta(query, conversation, language):
+        # Real handler returns "请重新提问" when conversation is empty.
+        return "这是新会话,你之前没有问过别的内容。"
+    monkeypatch.setattr(ar, "answer_meta", fake_answer_meta)
+
     resp = client.post("/agent/chat", json={
-        "query": "刚刚说的是什么",  # meta keyword, but no conversation
+        "query": "刚刚说的是什么",
         "tenant": "jd",
         "user_id": "jd-demo-user",
         "thread_id": "test-thread-3",
     })
     assert resp.status_code == 200
     events = _parse_sse(resp.text)
+    types = [e[0] for e in events]
+    assert "plan" not in types  # planner did NOT run
+    assert "specialist_start" not in types
     answer_events = [e for e in events if e[0] == "answer"]
-    # If a graph answer fired, intent should NOT be meta on it.
-    if answer_events:
-        assert answer_events[0][1].get("intent") != "meta"
+    assert len(answer_events) == 1
+    payload = answer_events[0][1]
+    assert payload["intent"] == "meta"
+    assert "新会话" in payload["text"] or "之前" in payload["text"]

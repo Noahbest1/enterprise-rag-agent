@@ -96,8 +96,15 @@ def classify_intent(query: str, *, has_conversation: bool) -> IntentVerdict:
     """Classify a query into meta / chitchat / kb.
 
     ``has_conversation`` is True when the caller has at least one prior
-    user+assistant pair in scope. Without history, a "meta" query has
-    nothing to refer to, so we degrade to ``kb`` (existing behavior).
+    user+assistant pair in scope. The flag was originally a hard prereq
+    for meta classification, but that produced a worse failure mode: a
+    fresh session where the user types "我之前问的是哪个订单" would
+    fall through to kb / planner, which then listed all of the user's
+    orders and the LLM hallucinated "你之前咨询的是这些订单". Cleaner to
+    fire ``meta`` on the keyword match alone and let the meta handler
+    return a polite "no prior conversation, please rephrase" fallback
+    when conversation is empty. The flag is now only used to log /
+    surface to traces — kept for compatibility.
     """
     q = (query or "").strip()
     if not q:
@@ -109,8 +116,10 @@ def classify_intent(query: str, *, has_conversation: bool) -> IntentVerdict:
     if m:
         return IntentVerdict(intent="chitchat", matched=m.group(0)[:60], via="rule")
 
-    # Meta requires both: keyword match AND prior turns AND short length.
-    if has_conversation and len(q) <= _META_MAX_LEN:
+    # Meta fires on keyword match + short query, regardless of whether
+    # ``has_conversation`` is True. The handler degrades gracefully when
+    # the conversation list is empty.
+    if len(q) <= _META_MAX_LEN:
         m = _META_RE.search(q)
         if m:
             return IntentVerdict(intent="meta", matched=m.group(0)[:60], via="rule")

@@ -69,11 +69,15 @@ def test_classify_kb_default(query):
     assert v.intent == "kb", f"{query!r} should be kb, got {v}"
 
 
-def test_meta_requires_conversation():
-    """Meta keywords without history should fall back to kb — the LLM
-    has nothing to reference."""
+def test_meta_fires_even_without_history():
+    """Meta keywords classify as ``meta`` regardless of has_conversation.
+    The handler returns a polite "no prior turns" fallback when conversation
+    is empty — falling through to KB / planner caused the order specialist
+    to list all the user's orders and the LLM to hallucinate "you previously
+    asked about these orders" (real bug observed 2026-04-28)."""
     v = classify_intent("刚刚翻译的是什么", has_conversation=False)
-    assert v.intent == "kb"
+    assert v.intent == "meta"
+    assert v.matched is not None
 
 
 def test_meta_requires_short_query():
@@ -235,15 +239,17 @@ def test_pipeline_kb_query_uses_retrieval(monkeypatch):
     assert ans.trace.get("intent") in (None, "kb")
 
 
-def test_pipeline_meta_without_history_falls_back_to_kb(monkeypatch):
-    """If the user types '刚刚说的' with NO conversation, dispatch must
-    NOT short-circuit — the kb path is the only sensible thing to do."""
-    _install_pipeline_mocks(monkeypatch, retrieve_should_fire=True)
+def test_pipeline_meta_without_history_short_circuits_with_fallback(monkeypatch):
+    """Meta keyword + NO conversation → still short-circuits (does NOT
+    invoke retrieval) and the meta handler returns its polite fallback.
+    Falling through to KB caused the LLM to hallucinate a "summary" of
+    arbitrary chunks (the bug we're fixing)."""
+    _install_pipeline_mocks(monkeypatch)  # retrieve must NOT fire
 
-    async def fake_chat_with_fallback(**kwargs):
-        return ("从 KB 答的。", "qwen")
-    monkeypatch.setattr(pipeline, "chat_once_with_fallback", fake_chat_with_fallback)
-    monkeypatch.setattr(pipeline, "expand_to_parents", lambda hits, _path: hits)
+    async def fake_meta(query, conversation, language):
+        # Real handler hits this branch internally when conversation is empty.
+        return "抱歉,我暂时无法回答关于上一轮对话的问题,请直接把您想问的内容再说一次。"
+    monkeypatch.setattr(pipeline, "answer_meta", fake_meta)
 
     ans = asyncio.run(pipeline.answer_query_async(
         "刚刚说的是什么",
@@ -251,5 +257,6 @@ def test_pipeline_meta_without_history_falls_back_to_kb(monkeypatch):
         conversation=None,
         use_semantic_cache=False,
     ))
-    # Must NOT be classified as meta — would have raised AssertionError on retrieve.
-    assert ans.trace.get("intent") != "meta"
+    assert ans.trace.get("intent") == "meta"
+    assert ans.citations == []
+    assert "请" in ans.text or "再说" in ans.text
