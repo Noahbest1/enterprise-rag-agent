@@ -48,7 +48,10 @@ def test_list_user_orders_tool(seeded):
 
 def test_check_return_eligibility_tool(seeded):
     from mcp_server.server import _call_tool
-    out = asyncio.run(_call_tool("check_return_eligibility", {"order_id": "JD20260418123"}))
+    # Use a delivered order — shipped orders now correctly return
+    # not_yet_delivered, so this test must target an order in the actual
+    # eligible window (post status-aware refactor of returns.py).
+    out = asyncio.run(_call_tool("check_return_eligibility", {"order_id": "JD20260420456"}))
     data = json.loads(out[0].text)
     assert data["ok"] is True
     assert data["refund_cents"] > 0

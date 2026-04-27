@@ -21,8 +21,9 @@ def seeded(seeded_db):
     return seeded_db
 
 
-def test_check_eligibility_ok_for_recent_shipped(seeded):
-    r = check_eligibility("JD20260418123")  # 5 days old, shipped
+def test_check_eligibility_ok_for_recent_delivered(seeded):
+    # delivered, 3 days old → estimated signed = today → window has full 7 days
+    r = check_eligibility("JD20260420456")
     assert r["ok"] is True
     assert r["days_left_in_window"] >= 1
     assert r["refund_cents"] > 0
@@ -34,16 +35,47 @@ def test_check_eligibility_rejects_refunded(seeded):
     assert r["reason"] == "already_refunded"
 
 
+def test_check_eligibility_shipped_not_yet_delivered(seeded):
+    """Shipped (in transit) — window hasn't started, separate reason from
+    'past the window' so the UI can show an accurate message."""
+    r = check_eligibility("JD20260418123")  # status=shipped
+    assert r["ok"] is False
+    assert r["reason"] == "not_yet_delivered"
+
+
+def test_check_eligibility_placed_not_yet_shipped(seeded):
+    """Placed but not shipped — even earlier than not_yet_delivered."""
+    r = check_eligibility("JD20260422789")  # status=placed
+    assert r["ok"] is False
+    assert r["reason"] == "not_yet_shipped"
+
+
 def test_check_eligibility_rejects_out_of_window(seeded):
-    # Backdate an order past the 7-day window
+    """Past the 7-day window from estimated sign date (placed_at + 3 days)."""
     with SessionLocal() as s:
-        o = s.get(Order, "JD20260418123")
+        o = s.get(Order, "JD20260420456")  # already delivered
+        # Backdate so estimated sign was > 7 days ago.
         o.placed_at = datetime.now(timezone.utc) - timedelta(days=15)
         s.commit()
 
-    r = check_eligibility("JD20260418123")
+    r = check_eligibility("JD20260420456")
     assert r["ok"] is False
     assert r["reason"] == "out_of_no_reason_window"
+
+
+def test_check_eligibility_window_uses_signed_estimate_not_placed(seeded):
+    """Order placed 9 days ago + delivered: with the OLD logic this would be
+    out_of_window (placed + 7 = -2 days left). With the new logic, estimated
+    signed = placed + 3 = 6 days ago, days_left = 7 - 6 = 1 → still in
+    window. This is the bug the user observed and we just fixed."""
+    with SessionLocal() as s:
+        o = s.get(Order, "JD20260420456")
+        o.placed_at = datetime.now(timezone.utc) - timedelta(days=9)
+        s.commit()
+
+    r = check_eligibility("JD20260420456")
+    assert r["ok"] is True, f"expected eligible but got {r}"
+    assert r["days_left_in_window"] >= 1
 
 
 def test_create_return_request_persists(seeded):

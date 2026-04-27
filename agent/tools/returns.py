@@ -1,11 +1,16 @@
 """Return / refund business logic.
 
 Rules implemented today:
-- 7-day no-reason window from placed_at. "refunded" orders can't be
-  returned again. "cancelled" orders can't be returned.
-- Eligibility message is in user language (matches the tenant's persona).
-- Refund amount equals order total minus (if any) shipping fee placeholder.
-- A ``ReturnRequest`` row is persisted on successful creation.
+- China e-commerce 7-day no-reason window — but **starts at delivery
+  (signed-for), not at order placement**. Real JD/Taobao behavior; the
+  earlier "from placed_at" rule was wrong and rejected too many orders.
+- Order model has no ``delivered_at`` field, so we estimate
+  ``signed_at = placed_at + SHIPPING_ESTIMATE_DAYS``.
+- "refunded" / "cancelled" orders can't be returned.
+- "placed" / "paid" orders aren't shipped yet → ``not_yet_shipped``.
+- "shipped" orders are in transit → ``not_yet_delivered`` (window has
+  not even started — different from being past it).
+- "delivered" orders go through the 7-day check from estimated sign date.
 
 Real platforms layer far more nuance (shipping insurance, damage triage,
 cross-store policies). We keep it simple but realistic enough that the
@@ -21,15 +26,32 @@ from rag.db.models import Order, ReturnRequest
 
 
 NO_REASON_WINDOW_DAYS = 7
+# Without a delivered_at column we approximate the sign date by adding a
+# typical shipping duration to placed_at. JD usually delivers in 1–3 days;
+# 3 is the conservative end of that range and avoids prematurely closing
+# the window for demo orders.
+SHIPPING_ESTIMATE_DAYS = 3
 
 
-def _within_no_reason_window(order: Order) -> tuple[bool, int]:
+def _eligibility_window(order: Order) -> tuple[bool, int, str | None]:
+    """Return ``(in_window, days_left, special_reason_or_None)``.
+
+    ``special_reason`` is set when the order can't be returned for a reason
+    *other* than "past the window" — used so the front-end can show a more
+    accurate message ("not yet shipped" vs "you missed the window").
+    """
+    if order.status in ("placed", "paid"):
+        return False, 0, "not_yet_shipped"
+    if order.status == "shipped":
+        return False, 0, "not_yet_delivered"
+
     placed = order.placed_at
     if placed.tzinfo is None:
         placed = placed.replace(tzinfo=timezone.utc)
-    elapsed = datetime.now(timezone.utc) - placed
-    days_left = NO_REASON_WINDOW_DAYS - elapsed.days
-    return days_left > 0, max(days_left, 0)
+    estimated_signed = placed + timedelta(days=SHIPPING_ESTIMATE_DAYS)
+    elapsed_since_sign = datetime.now(timezone.utc) - estimated_signed
+    days_left = NO_REASON_WINDOW_DAYS - elapsed_since_sign.days
+    return days_left > 0, max(days_left, 0), None
 
 
 def check_eligibility(order_id: str) -> dict[str, Any]:
@@ -43,12 +65,13 @@ def check_eligibility(order_id: str) -> dict[str, Any]:
         if order.status == "cancelled":
             return {"ok": False, "reason": "order_cancelled", "order_id": order.id}
 
-        in_window, days_left = _within_no_reason_window(order)
+        in_window, days_left, special = _eligibility_window(order)
         if not in_window:
             return {
                 "ok": False,
-                "reason": "out_of_no_reason_window",
+                "reason": special or "out_of_no_reason_window",
                 "order_id": order.id,
+                "current_status": order.status,
                 "placed_at": order.placed_at.isoformat(),
             }
 

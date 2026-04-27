@@ -31,6 +31,10 @@ from pydantic import BaseModel
 
 from agent.graph import build_graph
 from agent.state import AgentState
+from rag.answer.meta_answer import answer_chitchat, answer_meta
+from rag.config import settings
+from rag.query.intent import classify_intent
+from rag.query.normalize import detect_language
 
 
 router = APIRouter()
@@ -99,6 +103,49 @@ async def _stream_agent_turn(req: AgentChatRequest) -> AsyncGenerator[str, None]
         and getattr(snapshot, "values", None)
         and snapshot.values.get("tenant")
     )
+
+    # ── Intent routing on the Agent path (mirror of the RAG /answer/stream
+    # path's intent router). Without this, meta-questions like "我之前问的
+    #是哪个订单" route to the order specialist's default "list recent orders"
+    # behavior and the LLM narrates "您之前咨询的是这些订单" — which is a lie
+    # when the user hadn't actually asked about any specific order.
+    if getattr(settings, "enable_intent_routing", True):
+        prior_messages = (snapshot.values.get("messages") if has_prior else None) or []
+        # Coerce LangGraph BaseMessage objects → simple dicts for meta handler.
+        conversation: list[dict] = []
+        for m in prior_messages:
+            if isinstance(m, dict):
+                conversation.append({"role": m.get("role", "user"), "content": m.get("content", "")})
+            else:
+                # langchain_core.messages BaseMessage flavor
+                role = getattr(m, "type", None) or "user"
+                role = "assistant" if role == "ai" else ("user" if role == "human" else role)
+                conversation.append({"role": role, "content": getattr(m, "content", "") or ""})
+        verdict = classify_intent(req.query, has_conversation=bool(conversation))
+        if verdict.intent == "meta" and conversation:
+            language = detect_language(req.query)
+            text = await answer_meta(req.query, conversation, language)
+            yield _sse("answer", {
+                "text": text,
+                "citations": [],
+                "entities": (snapshot.values.get("entities") if has_prior else {}) or {},
+                "intent": "meta",
+                "intent_matched": verdict.matched,
+            })
+            yield _sse("done", {"total_latency_ms": int((time.perf_counter() - t0) * 1000)})
+            return
+        if verdict.intent == "chitchat":
+            language = detect_language(req.query)
+            text = await answer_chitchat(req.query, language)
+            yield _sse("answer", {
+                "text": text,
+                "citations": [],
+                "entities": (snapshot.values.get("entities") if has_prior else {}) or {},
+                "intent": "chitchat",
+                "intent_matched": verdict.matched,
+            })
+            yield _sse("done", {"total_latency_ms": int((time.perf_counter() - t0) * 1000)})
+            return
 
     if has_prior:
         # Continuation: send a minimal delta. The ``add`` reducer on
