@@ -40,3 +40,8 @@ alembic>=1.13,<2.0
 # Anthropic SDK is not strictly required (we call Claude via raw httpx in
 # fallback.py), but listing it makes the fallback path importable for tests.
 anthropic>=0.40,<1.0
+# Ingest cleaning pipeline
+datasketch>=1.6,<2.0           # MinHash dedup
+beautifulsoup4>=4.12,<5.0      # HTML parsing
+readability-lxml>=0.8,<1.0     # HTML boilerplate removal
+lxml>=5.0,<6.0                 # required by readability-lxml
